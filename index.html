@@ -465,6 +465,93 @@ button:active{
 
 
 /* =========================
+   指南按钮
+========================= */
+
+#guideButton{
+    position:fixed;
+    top:20px;
+    right:20px;
+    z-index:900;
+    padding:9px 13px;
+    font-size:15px;
+    border:2px solid #777;
+    border-radius:14px;
+    background:rgba(255,255,255,.9);
+    box-shadow:0 2px 8px rgba(0,0,0,.12)
+}
+
+
+/* =========================
+   指南弹窗
+========================= */
+
+#guideOverlay{
+    position:fixed;
+    inset:0;
+    z-index:1300;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,.4);
+    padding:18px;
+}
+
+#guideBox{
+    width:min(500px,94vw);
+    max-height:88vh;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    background:rgba(255,255,255,.98);
+    border:2px solid #777;
+    border-radius:22px;
+    padding:22px 20px;
+    box-shadow:0 6px 25px rgba(0,0,0,.25);
+    touch-action:auto;
+}
+
+#guideTitle{
+    text-align:center;
+    font-size:27px;
+    font-weight:bold;
+    color:#333;
+    margin-bottom:16px;
+}
+
+.guide-section{
+    text-align:left;
+    background:#f7f7f7;
+    border:1px solid #ddd;
+    border-radius:15px;
+    padding:12px 14px;
+    margin-bottom:11px;
+}
+
+.guide-section-title{
+    font-size:18px;
+    font-weight:bold;
+    color:#444;
+    margin-bottom:7px;
+}
+
+.guide-line{
+    font-size:14px;
+    color:#555;
+    line-height:1.65;
+}
+
+.guide-good{
+    color:#333;
+    font-weight:bold;
+}
+
+#closeGuideButton{
+    display:block;
+    margin:15px auto 0;
+}
+
+
+/* =========================
    手机端
    只调整手机布局
 ========================= */
@@ -623,6 +710,43 @@ button:active{
     #wardrobe-actions button{
         padding:10px 16px;
         font-size:14px
+    }
+
+
+    /* 指南按钮 */
+
+    #guideButton{
+        top:10px;
+        right:10px;
+        padding:7px 10px;
+        font-size:13px;
+        border-radius:12px
+    }
+
+    #guideBox{
+        width:94vw;
+        max-height:88vh;
+        padding:18px 14px;
+        border-radius:18px
+    }
+
+    #guideTitle{
+        font-size:23px;
+        margin-bottom:12px
+    }
+
+    .guide-section{
+        padding:10px 11px;
+        margin-bottom:9px
+    }
+
+    .guide-section-title{
+        font-size:16px
+    }
+
+    .guide-line{
+        font-size:13px;
+        line-height:1.6
     }
 }
 
@@ -834,6 +958,167 @@ button:active{
 
         <button id="homeButton">
             🏠 回家
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- 新增：右上角指南按钮 -->
+
+<button id="guideButton">
+    📖 指南
+</button>
+
+
+<!-- 新增：指南弹窗 -->
+
+<div id="guideOverlay">
+
+    <div id="guideBox">
+
+        <div id="guideTitle">
+            📖 怎么养良子？
+        </div>
+
+
+        <div class="guide-section">
+
+            <div class="guide-section-title">
+                🍚 怎么增加饱腹度？
+            </div>
+
+            <div class="guide-line">
+                🍬 糖果罐：饱腹 +10，心情 +5
+            </div>
+
+            <div class="guide-line">
+                🧪 瓶装幽火：饱腹 +10，心情 -5
+            </div>
+
+            <div class="guide-line">
+                🕯️ 银质的夜莺烛台：饱腹 +5
+            </div>
+
+            <div class="guide-line">
+                🏆 不知道装着什么的金杯：饱腹 +10，心情随机变化
+            </div>
+
+            <div class="guide-line">
+                🍵 茶：饱腹 +10，心情 +3
+            </div>
+
+        </div>
+
+
+        <div class="guide-section">
+
+            <div class="guide-section-title">
+                🛁 怎么增加清洁度？
+            </div>
+
+            <div class="guide-line">
+                📜 黄金残页：清洁 +10，心情 +5
+            </div>
+
+            <div class="guide-line">
+                🫖 水壶：清洁 +10，心情 +1
+            </div>
+
+        </div>
+
+
+        <div class="guide-section">
+
+            <div class="guide-section-title">
+                ❤️ 怎么增加心情？
+            </div>
+
+            <div class="guide-line">
+                👋 按住良子约 1 秒：心情 +2
+            </div>
+
+            <div class="guide-line">
+                🍬 糖果罐：心情 +5
+            </div>
+
+            <div class="guide-line">
+                📜 黄金残页：心情 +5
+            </div>
+
+            <div class="guide-line">
+                🍵 茶：心情 +3
+            </div>
+
+            <div class="guide-line">
+                🫖 水壶：心情 +1
+            </div>
+
+            <div class="guide-line">
+                🏆 金杯：心情会随机变化
+            </div>
+
+        </div>
+
+
+        <div class="guide-section">
+
+            <div class="guide-section-title">
+                👋 怎么摸良子？
+            </div>
+
+            <div class="guide-line">
+                按住良子约 1 秒，就可以摸摸良子 ❤️
+            </div>
+
+            <div class="guide-line">
+                每次成功摸良子，心情 +2。
+            </div>
+
+            <div class="guide-line">
+                摸完后需要等待一段时间才能再次摸。
+            </div>
+
+        </div>
+
+
+        <div class="guide-section">
+
+            <div class="guide-section-title">
+                👆 怎么打良子？
+            </div>
+
+            <div class="guide-line">
+                快速连续点击良子两次，就会打良子。
+            </div>
+
+            <div class="guide-line">
+                打良子会让心情 -5。
+            </div>
+
+        </div>
+
+
+        <div class="guide-section">
+
+            <div class="guide-section-title">
+                ⏰ 其他注意事项
+            </div>
+
+            <div class="guide-line">
+                良子的饱腹度和清洁度每 5 分钟下降 3。
+            </div>
+
+            <div class="guide-line">
+                要记得及时吃饭和洗澡，好好照顾良子！
+            </div>
+
+        </div>
+
+
+        <button id="closeGuideButton">
+            ✖️ 关闭指南
         </button>
 
     </div>
@@ -2108,7 +2393,8 @@ function renderSavedClothes(){
                     getSavedClothes()
                         .filter(
                             x=>
-                                x.id!==item.id
+                                x.id!==
+                                item.id
                         );
 
                 saveSavedClothes(arr);
@@ -2586,8 +2872,7 @@ function saveClothes(){
 
         id:
             "clothes-"+
-            Date.now()+
-            "-"+
+            Date.now()+"-"+
             Math.random()
                 .toString(36)
                 .slice(2),
@@ -3004,6 +3289,54 @@ document.getElementById(
     e=>{
         if(e.key==="Enter")
             startLiangzi()
+    }
+);
+
+
+/* =========================
+   指南
+========================= */
+
+const guideButton=
+    document.getElementById(
+        "guideButton"
+    );
+
+const guideOverlay=
+    document.getElementById(
+        "guideOverlay"
+    );
+
+const closeGuideButton=
+    document.getElementById(
+        "closeGuideButton"
+    );
+
+
+guideButton.addEventListener(
+    "click",
+    ()=>{
+        guideOverlay.style.display="flex"
+    }
+);
+
+
+closeGuideButton.addEventListener(
+    "click",
+    ()=>{
+        guideOverlay.style.display="none"
+    }
+);
+
+
+/* 点击弹窗外面也可以关闭指南 */
+
+guideOverlay.addEventListener(
+    "click",
+    e=>{
+        if(e.target===guideOverlay){
+            guideOverlay.style.display="none"
+        }
     }
 );
 
