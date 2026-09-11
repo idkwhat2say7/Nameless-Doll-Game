@@ -2373,6 +2373,8 @@ const DECAY_INTERVAL=
 
 const DECAY_AMOUNT=3;
 
+const MOOD_DECAY_AMOUNT=2;
+
 const GAME_KEY=
     "liangziGameSave";
 
@@ -3797,6 +3799,11 @@ function checkDecay(){
 
         cleanliness-=
             DECAY_AMOUNT*
+            missed;
+
+
+        mood-=
+            MOOD_DECAY_AMOUNT*
             missed;
 
 
