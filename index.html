@@ -2409,6 +2409,100 @@ let miniGamePlays=0;
 
 
 /* =========================
+   良子声音
+========================= */
+
+const liangziHappyVoice=new Audio("happy.mp3");
+
+const liangziAngryVoice=new Audio("angry.mp3");
+
+liangziHappyVoice.preload="auto";
+
+liangziAngryVoice.preload="auto";
+
+let moodVoiceInitialized=false;
+
+let moodVoiceLastValue=50;
+
+let moodVoiceNextThreshold=40;
+
+let lastAngryVoiceTime=0;
+
+function playHappyVoice(){
+
+    liangziHappyVoice.currentTime=0;
+
+    liangziHappyVoice.play().catch(()=>{});
+
+}
+
+
+function playAngryVoice(){
+
+    const now=Date.now();
+
+    if(now-lastAngryVoiceTime<200){
+
+        return
+
+    }
+
+    lastAngryVoiceTime=now;
+
+    liangziAngryVoice.currentTime=0;
+
+    liangziAngryVoice.play().catch(()=>{});
+
+}
+
+
+function checkMoodVoice(){
+
+    if(!moodVoiceInitialized){
+
+        moodVoiceLastValue=mood;
+        moodVoiceNextThreshold=
+            mood>=50
+                ?40
+                :Math.floor(mood/10)*10;
+
+        if(moodVoiceNextThreshold>=mood){
+            moodVoiceNextThreshold-=10
+        }
+
+        moodVoiceInitialized=true;
+
+        return
+
+    }
+
+    if(mood>=50){
+
+        moodVoiceNextThreshold=40;
+
+    }
+
+    if(mood<moodVoiceLastValue){
+
+        while(
+            mood<=moodVoiceNextThreshold &&
+            moodVoiceNextThreshold>=0
+        ){
+
+            playAngryVoice();
+
+            moodVoiceNextThreshold-=10;
+
+        }
+
+    }
+
+    moodVoiceLastValue=mood;
+
+}
+
+
+/* =========================
    物品
 ========================= */
 
@@ -2584,6 +2678,8 @@ function updateStats(){
     cleanliness=clamp(cleanliness);
 
     mood=clamp(mood);
+
+    checkMoodVoice();
 
 
     document.getElementById(
@@ -3559,6 +3655,8 @@ character.addEventListener(
                         "摸摸良子 ❤️"
                     );
 
+                    playHappyVoice();
+
 
                     saveGame();
 
@@ -3627,6 +3725,8 @@ character.addEventListener(
             showMessage(
                 "良子被打了……"
             );
+
+            playAngryVoice();
 
 
             saveGame();
