@@ -253,11 +253,13 @@ button:active{
     display:none;
     background:rgba(245,245,245,.97);
     overflow-y:auto;
-    touch-action:none
+    overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+    touch-action:auto
 }
 
 #wardrobe-content{
-    min-height:100%;
+    min-height:max-content;
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -353,7 +355,8 @@ button:active{
     border-radius:18px;
     overflow:hidden;
     box-shadow:0 4px 15px rgba(0,0,0,.18);
-    touch-action:none
+    touch-action:none;
+    flex-shrink:0
 }
 
 #drawing-character{
@@ -403,7 +406,8 @@ button:active{
     padding:12px;
     background:white;
     border:2px solid #777;
-    border-radius:18px
+    border-radius:18px;
+    flex-shrink:0
 }
 
 .drawing-tool-row{
@@ -454,7 +458,9 @@ button:active{
     justify-content:center;
     flex-wrap:wrap;
     gap:12px;
-    margin-top:12px
+    margin-top:12px;
+    padding-bottom:10px;
+    flex-shrink:0
 }
 
 
@@ -589,8 +595,17 @@ button:active{
     }
 
 
+    #wardrobe{
+        overflow-y:auto;
+        overflow-x:hidden;
+        -webkit-overflow-scrolling:touch;
+        touch-action:auto
+    }
+
     #wardrobe-content{
-        padding-top:15px
+        padding-top:15px;
+        padding-bottom:40px;
+        min-height:max-content
     }
 
     #wardrobe-title{
@@ -735,7 +750,6 @@ button:active{
 
     <h1>良子养成游戏</h1>
 
-    <!-- 改回原来的副标题 -->
     <div class="subtitle">不照顾好就撞飞你</div>
 
     <div class="stats">
@@ -1474,8 +1488,6 @@ function addDragEvents(img,item){
 
 function useItem(item){
 
-    /* 饱腹度100，不能吃 */
-
     if(
         item.hunger &&
         hunger>=100
@@ -1489,8 +1501,6 @@ function useItem(item){
     }
 
 
-    /* 清洁度100，不能洗 */
-
     if(
         item.clean &&
         cleanliness>=100
@@ -1503,8 +1513,6 @@ function useItem(item){
         return
     }
 
-
-    /* 洗澡 */
 
     if(item.clean){
 
@@ -1522,12 +1530,8 @@ function useItem(item){
     }
 
 
-    /* 吃东西 */
-
     hunger+=item.hunger||0;
 
-
-    /* 金杯：随机 -5 ～ +10 */
 
     if(item.randomMood){
 
@@ -1537,8 +1541,6 @@ function useItem(item){
 
         mood+=r;
 
-
-        /* 金杯不显示 ❓ */
 
         if(r<0){
 
@@ -1627,19 +1629,37 @@ homeButton.addEventListener(
 );
 
 
-/* 摸良子 */
+/* =========================
+   摸良子 / 打良子
+========================= */
 
 let petTimer=null,
-petCooldown=false;
+petCooldown=false,
+longPressTriggered=false,
+lastTap=0;
 
+
+/* 按住约1秒 = 摸良子 */
 
 character.addEventListener(
     "pointerdown",
-    ()=>{
+    e=>{
 
-        if(petCooldown)return;
+        if(e.pointerType==="mouse" && e.button!==0){
+            return
+        }
+
+        if(petCooldown){
+            return
+        }
+
+        longPressTriggered=false;
+
+        clearTimeout(petTimer);
 
         petTimer=setTimeout(()=>{
+
+            longPressTriggered=true;
 
             mood=clamp(mood+2);
 
@@ -1654,56 +1674,46 @@ character.addEventListener(
             setTimeout(
                 ()=>petCooldown=false,
                 90000
-            )
+            );
 
-        },1000)
-
-    }
-);
-
-
-character.addEventListener(
-    "pointerup",
-    ()=>clearTimeout(petTimer)
-);
-
-
-character.addEventListener(
-    "pointercancel",
-    ()=>clearTimeout(petTimer)
-);
-
-
-character.addEventListener(
-    "contextmenu",
-    e=>{
-
-        e.preventDefault();
-
-        mood=clamp(mood-5);
-
-        updateStats();
-
-        showMessage("良子被打了……");
-
-        saveGame()
+        },1000);
 
     }
 );
 
 
-let lastTap=0;
-
+/* 松开时取消长按 */
 
 character.addEventListener(
     "pointerup",
     e=>{
+
+        clearTimeout(petTimer);
+
+        /*
+           如果刚刚完成了长按，
+           这一次 pointerup 不可以被当成双击。
+        */
+
+        if(longPressTriggered){
+
+            lastTap=0;
+            longPressTriggered=false;
+
+            return
+        }
+
+
+        /*
+           快速点两下 = 打良子
+        */
 
         const now=Date.now();
 
         if(
             now-lastTap<350 &&
-            e.pointerType==="touch"
+            (e.pointerType==="touch" ||
+             e.pointerType==="mouse")
         ){
 
             mood=clamp(mood-5);
@@ -1712,10 +1722,41 @@ character.addEventListener(
 
             showMessage("良子被打了……");
 
-            saveGame()
+            saveGame();
+
+            lastTap=0;
+
+        }else{
+
+            lastTap=now
+
         }
 
-        lastTap=now
+    }
+);
+
+
+character.addEventListener(
+    "pointercancel",
+    ()=>{
+
+        clearTimeout(petTimer);
+
+        longPressTriggered=false;
+        lastTap=0;
+
+    }
+);
+
+
+/*
+   防止手机长按弹出系统菜单
+*/
+
+character.addEventListener(
+    "contextmenu",
+    e=>{
+        e.preventDefault()
     }
 );
 
@@ -2106,7 +2147,14 @@ function openWardrobe(){
 
     renderSavedClothes();
 
-    resizeDrawingCanvas()
+    resizeDrawingCanvas();
+
+    /*
+       打开衣柜时回到最上面，
+       之后手机可以正常往下滑。
+    */
+
+    wardrobe.scrollTop=0
 }
 
 
