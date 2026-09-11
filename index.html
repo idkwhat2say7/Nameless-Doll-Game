@@ -3,11 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-
 <title>良子养成游戏</title>
 
 <style>
-
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent
@@ -44,11 +42,6 @@ h1{
     font-size:18px;
     color:#555
 }
-
-
-/* =========================
-   状态
-========================= */
 
 .stats{
     position:absolute;
@@ -130,38 +123,33 @@ h1{
 }
 
 @keyframes questionPop{
-
-    0%{
-        transform:scale(0)
-    }
-
-    70%{
-        transform:scale(1.2)
-    }
-
-    100%{
-        transform:scale(1)
-    }
-
+    0%{transform:scale(0)}
+    70%{transform:scale(1.2)}
+    100%{transform:scale(1)}
 }
 
 
 /* =========================
-   食物 / 洗澡物品
+   食物 / 洗澡物品栏
+   缩小并下移，避免挡住良子
 ========================= */
 
 .choice-area{
     position:absolute;
-    bottom:100px;
+    bottom:70px;
+
     left:50%;
     transform:translateX(-50%);
+
     display:none;
-    gap:18px;
+    gap:8px;
     align-items:center;
+
     background:rgba(255,255,255,.85);
-    padding:15px 20px;
+    padding:8px 12px;
     border-radius:20px;
     border:2px solid #777;
+
     max-width:95vw;
     flex-wrap:wrap;
     justify-content:center
@@ -169,12 +157,12 @@ h1{
 
 .choice-box{
     text-align:center;
-    width:90px
+    width:72px
 }
 
 .choice-item{
-    width:75px;
-    height:75px;
+    width:58px;
+    height:58px;
     object-fit:contain;
     cursor:grab;
     user-select:none;
@@ -184,43 +172,59 @@ h1{
 }
 
 .choice-name{
-    font-size:13px;
-    margin-top:3px;
-    line-height:1.3
+    font-size:11px;
+    margin-top:2px;
+    line-height:1.2
 }
 
 .choice-count{
-    font-size:12px;
+    font-size:10px;
     color:#555;
-    margin-top:3px
+    margin-top:2px;
+    font-weight:bold
+}
+
+.choice-price{
+    font-size:9px;
+    color:#777;
+    margin-top:2px
 }
 
 
 /* =========================
-   按钮
+   底部按钮
 ========================= */
 
 .buttons{
     position:absolute;
-    bottom:35px;
+    bottom:25px;
     left:50%;
     transform:translateX(-50%);
+
     display:flex;
-    gap:15px;
+
+    flex-wrap:nowrap;
+
+    gap:8px;
+
     align-items:center;
     justify-content:center;
-    flex-wrap:wrap;
-    max-width:95vw
+
+    width:max-content;
+    max-width:98vw;
+
+    z-index:20
 }
 
 button{
-    padding:12px 22px;
-    font-size:17px;
+    padding:10px 16px;
+    font-size:15px;
     border:2px solid #777;
     border-radius:15px;
     background:rgba(255,255,255,.9);
     cursor:pointer;
-    touch-action:manipulation
+    touch-action:manipulation;
+    white-space:nowrap
 }
 
 button:active{
@@ -230,30 +234,6 @@ button:active{
 #homeButton{
     display:none
 }
-
-
-/* =========================
-   墨迹
-========================= */
-
-#currencyDisplay{
-    position:fixed;
-    top:20px;
-    right:115px;
-    z-index:900;
-    padding:9px 13px;
-    font-size:15px;
-    border:2px solid #777;
-    border-radius:14px;
-    background:rgba(255,255,255,.9);
-    box-shadow:0 2px 8px rgba(0,0,0,.12);
-    white-space:nowrap
-}
-
-
-/* =========================
-   消息
-========================= */
 
 #message{
     position:absolute;
@@ -267,7 +247,7 @@ button:active{
     font-size:20px;
     color:#333;
     display:none;
-    z-index:1500;
+    z-index:2000;
     box-shadow:0 4px 15px rgba(0,0,0,.2);
     max-width:90vw
 }
@@ -289,11 +269,6 @@ button:active{
     max-width:90vw
 }
 
-
-/* =========================
-   拖动物品
-========================= */
-
 .drag-item{
     position:fixed;
     width:80px;
@@ -305,11 +280,6 @@ button:active{
     opacity:.85
 }
 
-
-/* =========================
-   衣柜
-========================= */
-
 .clothes-canvas{
     position:absolute;
     left:0;
@@ -317,6 +287,11 @@ button:active{
     z-index:2;
     pointer-events:none
 }
+
+
+/* =========================
+   衣柜
+========================= */
 
 #wardrobe{
     position:fixed;
@@ -537,6 +512,26 @@ button:active{
 
 
 /* =========================
+   墨迹
+   放在指南左边
+========================= */
+
+#moneyDisplay{
+    position:fixed;
+    top:20px;
+    right:110px;
+    z-index:900;
+    padding:9px 13px;
+    font-size:15px;
+    border:2px solid #777;
+    border-radius:14px;
+    background:rgba(255,255,255,.9);
+    box-shadow:0 2px 8px rgba(0,0,0,.12);
+    white-space:nowrap
+}
+
+
+/* =========================
    指南
 ========================= */
 
@@ -619,113 +614,7 @@ button:active{
 
 
 /* =========================
-   商城
-========================= */
-
-#shopOverlay{
-    position:fixed;
-    inset:0;
-    z-index:1400;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    background:rgba(0,0,0,.4);
-    padding:15px
-}
-
-#shopBox{
-    width:min(650px,94vw);
-    max-height:88vh;
-    overflow-y:auto;
-    background:rgba(255,255,255,.98);
-    border:2px solid #777;
-    border-radius:22px;
-    padding:20px;
-    box-shadow:0 6px 25px rgba(0,0,0,.25);
-    touch-action:auto
-}
-
-#shopTitle{
-    text-align:center;
-    font-size:28px;
-    font-weight:bold;
-    color:#333;
-    margin-bottom:8px
-}
-
-#shopMoney{
-    text-align:center;
-    font-size:17px;
-    margin-bottom:15px
-}
-
-.shop-section{
-    margin-bottom:16px
-}
-
-.shop-section-title{
-    font-size:19px;
-    font-weight:bold;
-    margin-bottom:9px;
-    text-align:left;
-    color:#444
-}
-
-.shop-grid{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:8px
-}
-
-.shop-card{
-    background:#f8f8f8;
-    border:1px solid #ccc;
-    border-radius:13px;
-    padding:8px 5px;
-    text-align:center
-}
-
-.shop-card img{
-    width:65px;
-    height:65px;
-    object-fit:contain
-}
-
-.shop-card-name{
-    font-size:12px;
-    min-height:32px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    line-height:1.3
-}
-
-.shop-card-price{
-    font-size:12px;
-    color:#666;
-    margin:4px 0
-}
-
-.shop-card-owned{
-    font-size:11px;
-    color:#555;
-    margin-bottom:5px
-}
-
-.shop-buy{
-    padding:5px 8px;
-    font-size:12px;
-    border-radius:9px
-}
-
-#closeShopButton{
-    display:block;
-    margin:8px auto 0
-}
-
-
-/* =========================
-   Profile
+   个人档案
 ========================= */
 
 #profileOverlay,
@@ -815,6 +704,101 @@ button:active{
 
 
 /* =========================
+   商城
+========================= */
+
+#shopOverlay{
+    position:fixed;
+    inset:0;
+    z-index:1400;
+    display:none;
+    background:rgba(245,245,245,.97);
+    overflow-y:auto;
+    overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+    touch-action:auto
+}
+
+#shopBox{
+    width:min(650px,94vw);
+    margin:25px auto;
+    background:white;
+    border:2px solid #777;
+    border-radius:22px;
+    padding:20px 16px 25px;
+    box-shadow:0 6px 25px rgba(0,0,0,.2)
+}
+
+#shopTitle{
+    text-align:center;
+    font-size:28px;
+    font-weight:bold;
+    color:#333
+}
+
+#shopMoney{
+    text-align:center;
+    margin:8px 0 18px;
+    font-size:19px;
+    font-weight:bold;
+    color:#555
+}
+
+#shopList{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px
+}
+
+.shop-card{
+    background:#f7f7f7;
+    border:2px solid #ddd;
+    border-radius:17px;
+    padding:12px 8px;
+    text-align:center
+}
+
+.shop-card img{
+    width:90px;
+    height:90px;
+    object-fit:contain
+}
+
+.shop-name{
+    font-size:14px;
+    font-weight:bold;
+    color:#444;
+    min-height:38px;
+    display:flex;
+    align-items:center;
+    justify-content:center
+}
+
+.shop-price{
+    font-size:13px;
+    color:#777;
+    margin:4px 0
+}
+
+.shop-owned{
+    font-size:12px;
+    color:#666;
+    margin-bottom:7px
+}
+
+.shop-buy{
+    padding:7px 12px;
+    font-size:13px;
+    border-radius:11px
+}
+
+#closeShopButton{
+    display:block;
+    margin:18px auto 0
+}
+
+
+/* =========================
    手机端
 ========================= */
 
@@ -886,49 +870,67 @@ button:active{
     }
 
 
-    /* 手机物品栏 */
+    /* =========================
+       手机物品栏
+       缩小并下移
+    ========================= */
 
     .choice-area{
-        bottom:92px;
-        gap:7px;
-        padding:10px 12px;
-        border-radius:15px;
+        bottom:70px;
+
+        gap:5px;
+        padding:7px 8px;
+        border-radius:14px;
         width:auto;
         max-width:94vw;
+
         display:none;
-        max-height:235px;
+
+        max-height:130px;
         overflow-y:auto;
+
         align-items:start;
         justify-content:center
     }
 
     .choice-area .choice-box{
-        width:68px;
-        flex:0 0 68px
+        width:58px;
+        flex:0 0 58px
     }
 
     .choice-item{
-        width:58px;
-        height:58px
+        width:48px;
+        height:48px
     }
 
     .choice-name{
-        font-size:10px;
-        min-height:27px
+        font-size:9px;
+        min-height:22px
     }
 
     .choice-count{
-        font-size:9px
+        font-size:8px
+    }
+
+    .choice-price{
+        font-size:8px
     }
 
 
-    /* 手机按钮 */
+    /* =========================
+       手机按钮
+    ========================= */
 
     .buttons{
         bottom:calc(8px + env(safe-area-inset-bottom));
+
         gap:5px;
+
         width:96vw;
         max-width:96vw;
+
+        flex-wrap:wrap;
+
         z-index:20
     }
 
@@ -939,18 +941,9 @@ button:active{
     }
 
 
-    /* 手机墨迹 */
-
-    #currencyDisplay{
-        top:10px;
-        right:85px;
-        padding:7px 10px;
-        font-size:13px;
-        border-radius:12px
-    }
-
-
-    /* 衣柜 */
+    /* =========================
+       衣柜
+    ========================= */
 
     #wardrobe{
         overflow-y:auto;
@@ -983,7 +976,22 @@ button:active{
     }
 
 
-    /* 指南 */
+    /* =========================
+       墨迹
+    ========================= */
+
+    #moneyDisplay{
+        top:10px;
+        right:72px;
+        padding:7px 9px;
+        font-size:12px;
+        border-radius:12px
+    }
+
+
+    /* =========================
+       指南
+    ========================= */
 
     #guideButton{
         top:10px;
@@ -1020,53 +1028,61 @@ button:active{
     }
 
 
-    /* 手机商城 */
+    /* =========================
+       商城手机
+    ========================= */
 
     #shopBox{
         width:94vw;
-        max-height:88vh;
-        padding:14px
+        margin:12px auto;
+        padding:16px 11px 20px;
+        border-radius:18px
     }
 
     #shopTitle{
-        font-size:23px
+        font-size:24px
     }
 
     #shopMoney{
-        font-size:15px
+        font-size:17px;
+        margin:6px 0 14px
     }
 
-    .shop-grid{
-        grid-template-columns:repeat(3,1fr);
-        gap:7px
+    #shopList{
+        gap:8px
     }
 
     .shop-card{
-        padding:6px 3px
+        padding:9px 5px;
+        border-radius:14px
     }
 
     .shop-card img{
-        width:55px;
-        height:55px
+        width:65px;
+        height:65px
     }
 
-    .shop-card-name{
+    .shop-name{
+        font-size:11px;
+        min-height:32px
+    }
+
+    .shop-price{
         font-size:10px
     }
 
-    .shop-card-price{
+    .shop-owned{
         font-size:10px
-    }
-
-    .shop-card-owned{
-        font-size:9px
     }
 
     .shop-buy{
-        padding:5px 7px;
-        font-size:10px
+        padding:6px 9px;
+        font-size:11px
     }
 
+    #closeShopButton{
+        margin-top:13px
+    }
 }
 
 
@@ -1099,19 +1115,17 @@ button:active{
     }
 
     .choice-area{
-        bottom:88px;
-        max-height:205px
+        bottom:65px;
+        max-height:120px
     }
 
     .buttons{
         bottom:calc(5px + env(safe-area-inset-bottom))
     }
-
 }
 
 </style>
 </head>
-
 
 <body>
 
@@ -1123,9 +1137,6 @@ button:active{
         不照顾好就撞飞你
     </div>
 
-
-    <!-- 状态栏 -->
-
     <div class="stats">
 
         <div class="stat">
@@ -1134,12 +1145,8 @@ button:active{
         </div>
 
         <div class="bar">
-            <div
-                id="hunger-fill"
-                class="fill"
-            ></div>
+            <div id="hunger-fill" class="fill"></div>
         </div>
-
 
         <div class="stat">
             🛁 清洁度：
@@ -1147,12 +1154,8 @@ button:active{
         </div>
 
         <div class="bar">
-            <div
-                id="clean-fill"
-                class="fill"
-            ></div>
+            <div id="clean-fill" class="fill"></div>
         </div>
-
 
         <div class="stat">
             ❤️ 心情：
@@ -1160,12 +1163,8 @@ button:active{
         </div>
 
         <div class="bar">
-            <div
-                id="mood-fill"
-                class="fill"
-            ></div>
+            <div id="mood-fill" class="fill"></div>
         </div>
-
 
         <div class="time-text">
             下一次状态下降：
@@ -1174,8 +1173,6 @@ button:active{
 
     </div>
 
-
-    <!-- 良子 -->
 
     <div class="character-area">
 
@@ -1201,8 +1198,6 @@ button:active{
     </div>
 
 
-    <!-- 食物 / 洗澡物品 -->
-
     <div
         id="choiceArea"
         class="choice-area"
@@ -1213,8 +1208,6 @@ button:active{
 
     <div id="dialogue"></div>
 
-
-    <!-- 底部按钮 -->
 
     <div class="buttons">
 
@@ -1247,15 +1240,11 @@ button:active{
 </div>
 
 
-<!-- 墨迹 -->
-
-<div id="currencyDisplay">
+<div id="moneyDisplay">
     💰 墨迹：
     <span id="ink-text">100</span>
 </div>
 
-
-<!-- 指南 -->
 
 <button id="guideButton">
     📖 指南
@@ -1263,7 +1252,7 @@ button:active{
 
 
 <!-- =========================
-     指南弹窗
+     指南
 ========================= -->
 
 <div id="guideOverlay">
@@ -1395,15 +1384,23 @@ button:active{
         <div class="guide-section">
 
             <div class="guide-section-title">
-                💰 墨迹
+                💰 墨迹与商城
             </div>
 
             <div class="guide-line">
-                墨迹可以在小商城购买食物和洗澡用品。
+                🛒 可以在小商城购买食物和洗澡用品。
             </div>
 
             <div class="guide-line">
-                买来的东西会保存在你的物品栏里。
+                📦 买到的物品会储存在背包里。
+            </div>
+
+            <div class="guide-line">
+                🍽️ 食物和 🛁 洗澡界面会显示当前拥有数量。
+            </div>
+
+            <div class="guide-line">
+                💰 使用物品时不会额外扣钱，购买时才会消耗墨迹。
             </div>
 
         </div>
@@ -1436,7 +1433,7 @@ button:active{
 
 
 <!-- =========================
-     小商城
+     商城
 ========================= -->
 
 <div id="shopOverlay">
@@ -1444,46 +1441,15 @@ button:active{
     <div id="shopBox">
 
         <div id="shopTitle">
-            🛒 小商城
+            🛒 良子小商城
         </div>
 
         <div id="shopMoney">
             💰 墨迹：
-            <span id="shop-ink">100</span>
+            <span id="shopInk">100</span>
         </div>
 
-
-        <!-- 食物 -->
-
-        <div class="shop-section">
-
-            <div class="shop-section-title">
-                🍽️ 食物
-            </div>
-
-            <div
-                id="foodShopGrid"
-                class="shop-grid"
-            ></div>
-
-        </div>
-
-
-        <!-- 洗澡 -->
-
-        <div class="shop-section">
-
-            <div class="shop-section-title">
-                🛁 洗澡用品
-            </div>
-
-            <div
-                id="bathShopGrid"
-                class="shop-grid"
-            ></div>
-
-        </div>
-
+        <div id="shopList"></div>
 
         <button id="closeShopButton">
             ✖️ 关闭商城
@@ -1510,7 +1476,6 @@ button:active{
             可以保存你画过的衣服，以后随时换回来！
         </div>
 
-
         <div id="saved-wardrobe">
 
             <div id="saved-wardrobe-title">
@@ -1521,7 +1486,6 @@ button:active{
 
         </div>
 
-
         <div id="drawing-area">
 
             <img
@@ -1529,9 +1493,7 @@ button:active{
                 src="character.png"
             >
 
-            <canvas
-                id="drawing-canvas"
-            ></canvas>
+            <canvas id="drawing-canvas"></canvas>
 
             <div id="clothing-guide">
                 <span>
@@ -1540,7 +1502,6 @@ button:active{
             </div>
 
         </div>
-
 
         <div id="drawing-tools">
 
@@ -1683,7 +1644,6 @@ button:active{
             📖 良子个人档案
         </div>
 
-
         <div class="profile-row">
             <span class="profile-label">
                 名字
@@ -1696,7 +1656,6 @@ button:active{
                 -
             </span>
         </div>
-
 
         <div class="profile-row">
             <span class="profile-label">
@@ -1711,7 +1670,6 @@ button:active{
             </span>
         </div>
 
-
         <div class="profile-row">
             <span class="profile-label">
                 🌱 开始养育
@@ -1724,7 +1682,6 @@ button:active{
                 -
             </span>
         </div>
-
 
         <div class="profile-row">
             <span class="profile-label">
@@ -1739,7 +1696,6 @@ button:active{
             </span>
         </div>
 
-
         <div class="profile-row">
             <span class="profile-label">
                 🍚 饱腹度
@@ -1752,7 +1708,6 @@ button:active{
                 -
             </span>
         </div>
-
 
         <div class="profile-row">
             <span class="profile-label">
@@ -1767,7 +1722,6 @@ button:active{
             </span>
         </div>
 
-
         <div class="profile-row">
             <span class="profile-label">
                 ❤️ 心情
@@ -1780,7 +1734,6 @@ button:active{
                 -
             </span>
         </div>
-
 
         <div class="profile-row">
             <span class="profile-label">
@@ -1795,7 +1748,6 @@ button:active{
             </span>
         </div>
 
-
         <div class="profile-actions">
 
             <button id="renameButton">
@@ -1807,7 +1759,6 @@ button:active{
             </button>
 
         </div>
-
 
         <div id="authorCredit">
             作者：Woshi Jy，有问题可联系fb回报
@@ -1856,117 +1807,103 @@ button:active{
 
 <script>
 
-
-/* =========================
-   DOM
-========================= */
-
 const character=
-    document.getElementById("character");
+    document.getElementById("character"),
 
-const choiceArea=
-    document.getElementById("choiceArea");
+choiceArea=
+    document.getElementById("choiceArea"),
 
-const message=
-    document.getElementById("message");
+message=
+    document.getElementById("message"),
 
-const dialogue=
-    document.getElementById("dialogue");
+dialogue=
+    document.getElementById("dialogue"),
 
-const questionMark=
-    document.getElementById("questionMark");
+questionMark=
+    document.getElementById("questionMark"),
 
-const homeButton=
-    document.getElementById("homeButton");
+homeButton=
+    document.getElementById("homeButton"),
 
-const foodButton=
-    document.getElementById("foodButton");
+foodButton=
+    document.getElementById("foodButton"),
 
-const bathButton=
-    document.getElementById("bathButton");
+bathButton=
+    document.getElementById("bathButton"),
 
-const shopButton=
-    document.getElementById("shopButton");
+clothesButton=
+    document.getElementById("clothesButton"),
 
-const clothesButton=
-    document.getElementById("clothesButton");
+profileButton=
+    document.getElementById("profileButton"),
 
-const profileButton=
-    document.getElementById("profileButton");
+shopButton=
+    document.getElementById("shopButton"),
 
-const wardrobe=
-    document.getElementById("wardrobe");
+wardrobe=
+    document.getElementById("wardrobe"),
 
-const drawingCanvas=
-    document.getElementById("drawing-canvas");
+drawingCanvas=
+    document.getElementById("drawing-canvas"),
 
-const drawingCtx=
-    drawingCanvas.getContext("2d");
+drawingCtx=
+    drawingCanvas.getContext("2d"),
 
-const drawingArea=
-    document.getElementById("drawing-area");
+drawingArea=
+    document.getElementById("drawing-area"),
 
-const mainClothesCanvas=
-    document.getElementById("mainClothesCanvas");
+mainClothesCanvas=
+    document.getElementById("mainClothesCanvas"),
 
-const mainClothesCtx=
+mainClothesCtx=
     mainClothesCanvas.getContext("2d");
 
 
-/* =========================
-   游戏数据
-========================= */
-
-let hunger=50;
-
-let cleanliness=50;
-
-let mood=50;
-
-let ink=100;
-
-let currentScene="room";
-
-let nextDecayTime=
+let hunger=50,
+cleanliness=50,
+mood=50,
+ink=100,
+currentScene="room",
+nextDecayTime=
     Date.now()+300000;
 
 
 const DECAY_INTERVAL=
-    5*60*1000;
+    5*60*1000,
 
-const DECAY_AMOUNT=3;
+DECAY_AMOUNT=3,
 
-const GAME_KEY=
-    "liangziGameSave";
+GAME_KEY=
+    "liangziGameSave",
 
-const CLOTHES_KEY=
-    "liangziCustomClothes";
+CLOTHES_KEY=
+    "liangziCustomClothes",
 
-const PROFILE_KEY=
+PROFILE_KEY=
     "liangziProfile";
 
 
-let liangziProfile=null;
+let liangziProfile=null,
 
-let drawColor="#ff4d4d";
+drawColor="#ff4d4d",
 
-let drawTool="brush";
+drawTool="brush",
 
-let isDrawing=false;
+isDrawing=false,
 
-let lastDrawX=0;
+lastDrawX=0,
 
-let lastDrawY=0;
+lastDrawY=0,
 
-let drawHistory=[];
+drawHistory=[],
 
-let selectedClothesId=null;
+selectedClothesId=null,
 
-let currentClothesData=null;
+currentClothesData=null;
 
 
 /* =========================
-   物品
+   食物
 ========================= */
 
 const foodItems=[
@@ -1976,8 +1913,7 @@ const foodItems=[
         name:"糖果罐",
         hunger:10,
         mood:5,
-        price:10,
-        quantity:3
+        price:10
     },
 
     {
@@ -1985,10 +1921,9 @@ const foodItems=[
         name:"瓶装幽火",
         hunger:10,
         mood:-5,
-        price:15,
         dialogue:"我这是要吃自己吗",
         question:true,
-        quantity:3
+        price:15
     },
 
     {
@@ -1996,10 +1931,9 @@ const foodItems=[
         name:"银质的夜莺烛台",
         hunger:5,
         mood:0,
-        price:20,
         dialogue:"这真的能吃吗",
         question:true,
-        quantity:3
+        price:20
     },
 
     {
@@ -2008,8 +1942,7 @@ const foodItems=[
         hunger:10,
         randomMood:true,
         question:false,
-        price:25,
-        quantity:3
+        price:25
     },
 
     {
@@ -2017,12 +1950,15 @@ const foodItems=[
         name:"茶",
         hunger:10,
         mood:3,
-        price:10,
-        quantity:3
+        price:10
     }
 
 ];
 
+
+/* =========================
+   洗澡
+========================= */
 
 const bathItems=[
 
@@ -2031,8 +1967,7 @@ const bathItems=[
         name:"黄金残页",
         clean:10,
         mood:5,
-        price:15,
-        quantity:3
+        price:15
     },
 
     {
@@ -2040,99 +1975,63 @@ const bathItems=[
         name:"水壶",
         clean:10,
         mood:1,
-        price:10,
-        quantity:3
+        price:10
     }
 
 ];
 
 
 /* =========================
-   初始化库存
+   库存
 ========================= */
 
-const allItems=[
-    ...foodItems,
-    ...bathItems
-];
-
+const DEFAULT_ITEM_COUNT=3;
 
 let inventory={};
 
 
-function initializeInventory(){
+function getAllItems(){
 
-    let saved=null;
-
-    try{
-
-        saved=
-            JSON.parse(
-                localStorage.getItem(
-                    "liangziInventory"
-                )||"null"
-            );
-
-    }catch(e){
-
-        saved=null
-
-    }
-
-
-    allItems.forEach(item=>{
-
-        if(
-            saved &&
-            typeof saved[item.name]==="number"
-        ){
-
-            inventory[item.name]=
-                Math.max(
-                    0,
-                    Math.floor(
-                        saved[item.name]
-                    )
-                );
-
-        }else{
-
-            inventory[item.name]=3;
-
-        }
-
-    });
+    return [
+        ...foodItems,
+        ...bathItems
+    ]
 
 }
 
 
-function saveInventory(){
+function createDefaultInventory(){
 
-    localStorage.setItem(
-        "liangziInventory",
-        JSON.stringify(inventory)
-    );
+    const obj={};
+
+    getAllItems().forEach(item=>{
+
+        obj[item.name]=
+            DEFAULT_ITEM_COUNT
+
+    });
+
+    return obj
 
 }
 
 
 /* =========================
-   数值限制
+   状态
 ========================= */
 
 function clamp(v){
 
     return Math.max(
         0,
-        Math.min(100,v)
+        Math.min(
+            100,
+            v
+        )
     )
 
 }
 
-
-/* =========================
-   更新状态
-========================= */
 
 function updateStats(){
 
@@ -2142,34 +2041,25 @@ function updateStats(){
 
     mood=clamp(mood);
 
+    ink=Math.max(
+        0,
+        Math.floor(ink)
+    );
+
 
     document.getElementById(
         "hunger-text"
     ).textContent=hunger;
 
+
     document.getElementById(
         "clean-text"
     ).textContent=cleanliness;
 
+
     document.getElementById(
         "mood-text"
     ).textContent=mood;
-
-
-    document.getElementById(
-        "hunger-fill"
-    ).style.width=
-        hunger+"%";
-
-    document.getElementById(
-        "clean-fill"
-    ).style.width=
-        cleanliness+"%";
-
-    document.getElementById(
-        "mood-fill"
-    ).style.width=
-        mood+"%";
 
 
     document.getElementById(
@@ -2178,8 +2068,21 @@ function updateStats(){
 
 
     document.getElementById(
-        "shop-ink"
-    ).textContent=ink;
+        "hunger-fill"
+    ).style.width=
+        hunger+"%";
+
+
+    document.getElementById(
+        "clean-fill"
+    ).style.width=
+        cleanliness+"%";
+
+
+    document.getElementById(
+        "mood-fill"
+    ).style.width=
+        mood+"%";
 
 
     updateProfileDisplay()
@@ -2188,7 +2091,7 @@ function updateStats(){
 
 
 /* =========================
-   消息
+   提示
 ========================= */
 
 function showMessage(text){
@@ -2197,26 +2100,19 @@ function showMessage(text){
 
     message.style.display="block";
 
-
     clearTimeout(
         showMessage.timer
     );
 
-
-    showMessage.timer=
-        setTimeout(
-            ()=>{
-                message.style.display="none"
-            },
-            1500
-        )
+    showMessage.timer=setTimeout(
+        ()=>{
+            message.style.display="none"
+        },
+        1500
+    )
 
 }
 
-
-/* =========================
-   食物对白
-========================= */
 
 function showFoodDialogue(
     text,
@@ -2230,13 +2126,11 @@ function showFoodDialogue(
 
     if(showQuestion){
 
-        questionMark.style.display=
-            "block"
+        questionMark.style.display="block"
 
     }else{
 
-        questionMark.style.display=
-            "none"
+        questionMark.style.display="none"
 
     }
 
@@ -2246,19 +2140,16 @@ function showFoodDialogue(
     );
 
 
-    showFoodDialogue.timer=
-        setTimeout(
-            ()=>{
+    showFoodDialogue.timer=setTimeout(
+        ()=>{
 
-                dialogue.style.display=
-                    "none";
+            dialogue.style.display="none";
 
-                questionMark.style.display=
-                    "none"
+            questionMark.style.display="none"
 
-            },
-            1800
-        )
+        },
+        1800
+    )
 
 }
 
@@ -2277,14 +2168,11 @@ function setScene(scene){
         document.body.style.backgroundImage=
             'url("room.png")';
 
-        choiceArea.style.display=
-            "none";
+        choiceArea.style.display="none";
 
-        homeButton.style.display=
-            "none";
+        homeButton.style.display="none"
 
     }
-
 
     else if(scene==="food"){
 
@@ -2293,11 +2181,9 @@ function setScene(scene){
 
         showChoices(foodItems);
 
-        homeButton.style.display=
-            "block";
+        homeButton.style.display="block"
 
     }
-
 
     else if(scene==="bath"){
 
@@ -2306,8 +2192,7 @@ function setScene(scene){
 
         showChoices(bathItems);
 
-        homeButton.style.display=
-            "block";
+        homeButton.style.display="block"
 
     }
 
@@ -2328,22 +2213,19 @@ function showChoices(items){
         const box=
             document.createElement("div");
 
-        box.className=
-            "choice-box";
+        box.className="choice-box";
 
 
         const img=
             document.createElement("img");
 
-        img.className=
-            "choice-item";
+        img.className="choice-item";
 
         img.src=item.img;
 
         img.draggable=false;
 
-        img.dataset.item=
-            item.name;
+        img.dataset.item=item.name;
 
 
         box.appendChild(img);
@@ -2352,11 +2234,9 @@ function showChoices(items){
         const name=
             document.createElement("div");
 
-        name.className=
-            "choice-name";
+        name.className="choice-name";
 
-        name.textContent=
-            item.name;
+        name.textContent=item.name;
 
 
         box.appendChild(name);
@@ -2365,8 +2245,7 @@ function showChoices(items){
         const count=
             document.createElement("div");
 
-        count.className=
-            "choice-count";
+        count.className="choice-count";
 
         count.textContent=
             "拥有："+(
@@ -2375,6 +2254,18 @@ function showChoices(items){
 
 
         box.appendChild(count);
+
+
+        const price=
+            document.createElement("div");
+
+        price.className="choice-price";
+
+        price.textContent=
+            "💰 "+item.price+" 墨迹";
+
+
+        box.appendChild(price);
 
 
         choiceArea.appendChild(box);
@@ -2388,29 +2279,7 @@ function showChoices(items){
     });
 
 
-    choiceArea.style.display=
-        "flex"
-
-}
-
-
-/* =========================
-   更新物品数量
-========================= */
-
-function refreshCurrentItems(){
-
-    if(currentScene==="food"){
-
-        showChoices(foodItems)
-
-    }
-
-    else if(currentScene==="bath"){
-
-        showChoices(bathItems)
-
-    }
+    choiceArea.style.display="flex"
 
 }
 
@@ -2419,10 +2288,7 @@ function refreshCurrentItems(){
    拖动物品
 ========================= */
 
-function addDragEvents(
-    img,
-    item
-){
+function addDragEvents(img,item){
 
     let dragging=false;
 
@@ -2437,14 +2303,18 @@ function addDragEvents(
 
 
         if(
-            (inventory[item.name]||0)<=0
+            !inventory[item.name] ||
+            inventory[item.name]<=0
         ){
 
             showMessage(
-                "你没有这个物品了！先去商城购买吧 🛒"
+                "没有「"+
+                item.name+
+                "」了，去商城购买吧！🛒"
             );
 
             return
+
         }
 
 
@@ -2453,11 +2323,9 @@ function addDragEvents(
         pointerId=e.pointerId;
 
 
-        clone=
-            img.cloneNode(true);
+        clone=img.cloneNode(true);
 
-        clone.className=
-            "drag-item";
+        clone.className="drag-item";
 
         clone.style.left=
             e.clientX+"px";
@@ -2623,21 +2491,6 @@ function addDragEvents(
 
 function useItem(item){
 
-    const owned=
-        inventory[item.name]||0;
-
-
-    if(owned<=0){
-
-        showMessage(
-            "这个物品已经没有了！去商城买一些吧 🛒"
-        );
-
-        return
-
-    }
-
-
     if(
         item.hunger &&
         hunger>=100
@@ -2666,49 +2519,46 @@ function useItem(item){
     }
 
 
-    /* 消耗一个物品 */
-
-    inventory[item.name]--;
-
-    saveInventory();
-
-
-    /* 洗澡 */
-
-    if(item.clean){
-
-        cleanliness+=
-            item.clean;
-
-        mood+=
-            item.mood||0;
-
-
-        updateStats();
-
-        saveGame();
-
+    if(
+        !inventory[item.name] ||
+        inventory[item.name]<=0
+    ){
 
         showMessage(
-            item.name+
-            " 使用成功！"+
-            " 剩余 "+
-            inventory[item.name]+
-            " 个 🛁"
+            "没有这个物品了！去商城购买吧 🛒"
         );
-
-
-        refreshCurrentItems();
 
         return
 
     }
 
 
-    /* 吃饭 */
+    inventory[item.name]--;
 
-    hunger+=
-        item.hunger||0;
+
+    if(item.clean){
+
+        cleanliness+=item.clean;
+
+        mood+=item.mood||0;
+
+        updateStats();
+
+        saveGame();
+
+        showMessage(
+            item.name+
+            " 使用成功！"
+        );
+
+        showChoices(bathItems);
+
+        return
+
+    }
+
+
+    hunger+=item.hunger||0;
 
 
     if(item.randomMood){
@@ -2753,8 +2603,7 @@ function useItem(item){
 
     else{
 
-        mood+=
-            item.mood||0;
+        mood+=item.mood||0;
 
 
         if(item.dialogue){
@@ -2770,10 +2619,7 @@ function useItem(item){
 
             showMessage(
                 item.name+
-                " 吃掉了！"+
-                " 剩余 "+
-                inventory[item.name]+
-                " 个 🍚"
+                " 吃掉了！"
             )
 
         }
@@ -2785,7 +2631,12 @@ function useItem(item){
 
     saveGame();
 
-    refreshCurrentItems()
+
+    showChoices(
+        currentScene==="bath"
+            ?bathItems
+            :foodItems
+    )
 
 }
 
@@ -2797,13 +2648,11 @@ function useItem(item){
 foodButton.addEventListener(
     "click",
     ()=>{
-
         setScene(
             currentScene==="food"
                 ?"room"
                 :"food"
         )
-
     }
 );
 
@@ -2811,20 +2660,20 @@ foodButton.addEventListener(
 bathButton.addEventListener(
     "click",
     ()=>{
-
         setScene(
             currentScene==="bath"
                 ?"room"
                 :"bath"
         )
-
     }
 );
 
 
 homeButton.addEventListener(
     "click",
-    ()=>setScene("room")
+    ()=>{
+        setScene("room")
+    }
 );
 
 
@@ -2838,128 +2687,114 @@ const shopOverlay=
     );
 
 
-const foodShopGrid=
+const shopList=
     document.getElementById(
-        "foodShopGrid"
+        "shopList"
     );
 
 
-const bathShopGrid=
+const shopInk=
     document.getElementById(
-        "bathShopGrid"
+        "shopInk"
     );
 
 
-function createShopCard(
-    item
-){
+function openShop(){
 
-    const card=
-        document.createElement("div");
+    renderShop();
 
-    card.className=
-        "shop-card";
+    shopOverlay.style.display="block"
+
+}
 
 
-    const img=
-        document.createElement("img");
+function closeShop(){
 
-    img.src=item.img;
-
-
-    const name=
-        document.createElement("div");
-
-    name.className=
-        "shop-card-name";
-
-    name.textContent=
-        item.name;
-
-
-    const price=
-        document.createElement("div");
-
-    price.className=
-        "shop-card-price";
-
-    price.textContent=
-        "💰 "+item.price+" 墨迹";
-
-
-    const owned=
-        document.createElement("div");
-
-    owned.className=
-        "shop-card-owned";
-
-    owned.textContent=
-        "拥有："+(
-            inventory[item.name]||0
-        );
-
-
-    const buy=
-        document.createElement("button");
-
-    buy.className=
-        "shop-buy";
-
-    buy.textContent=
-        "购买";
-
-
-    buy.onclick=()=>{
-
-        buyItem(item)
-
-    };
-
-
-    card.appendChild(img);
-
-    card.appendChild(name);
-
-    card.appendChild(price);
-
-    card.appendChild(owned);
-
-    card.appendChild(buy);
-
-
-    return card
+    shopOverlay.style.display="none"
 
 }
 
 
 function renderShop(){
 
-    foodShopGrid.innerHTML="";
+    shopList.innerHTML="";
 
-    bathShopGrid.innerHTML="";
-
-
-    foodItems.forEach(
-        item=>{
-            foodShopGrid.appendChild(
-                createShopCard(item)
-            )
-        }
-    );
+    shopInk.textContent=ink;
 
 
-    bathItems.forEach(
-        item=>{
-            bathShopGrid.appendChild(
-                createShopCard(item)
-            )
-        }
-    );
+    getAllItems().forEach(item=>{
+
+        const card=
+            document.createElement("div");
+
+        card.className="shop-card";
 
 
-    document.getElementById(
-        "shop-ink"
-    ).textContent=ink
+        const img=
+            document.createElement("img");
+
+        img.src=item.img;
+
+        img.draggable=false;
+
+        card.appendChild(img);
+
+
+        const name=
+            document.createElement("div");
+
+        name.className="shop-name";
+
+        name.textContent=item.name;
+
+        card.appendChild(name);
+
+
+        const price=
+            document.createElement("div");
+
+        price.className="shop-price";
+
+        price.textContent=
+            "💰 "+item.price+" 墨迹 / 个";
+
+        card.appendChild(price);
+
+
+        const owned=
+            document.createElement("div");
+
+        owned.className="shop-owned";
+
+        owned.textContent=
+            "已有："+(
+                inventory[item.name]||0
+            );
+
+        card.appendChild(owned);
+
+
+        const buy=
+            document.createElement("button");
+
+        buy.className="shop-buy";
+
+        buy.textContent=
+            "🛒 购买";
+
+
+        buy.onclick=()=>{
+
+            buyItem(item)
+
+        };
+
+
+        card.appendChild(buy);
+
+        shopList.appendChild(card)
+
+    })
 
 }
 
@@ -2982,43 +2817,30 @@ function buyItem(item){
     ink-=item.price;
 
 
-    inventory[item.name]=
-        (inventory[item.name]||0)+1;
+    if(
+        typeof inventory[item.name]!=="number"
+    ){
+
+        inventory[item.name]=0
+
+    }
 
 
-    saveInventory();
+    inventory[item.name]++;
 
-    saveGame();
 
     updateStats();
+
+    saveGame();
 
     renderShop();
 
 
     showMessage(
-        "购买成功！"+
-        " 获得 1 个 "+
+        "购买成功！获得「"+
         item.name+
-        " 🛒"
+        "」✨"
     )
-
-}
-
-
-function openShop(){
-
-    renderShop();
-
-    shopOverlay.style.display=
-        "flex"
-
-}
-
-
-function closeShop(){
-
-    shopOverlay.style.display=
-        "none"
 
 }
 
@@ -3040,13 +2862,9 @@ document.getElementById(
 shopOverlay.addEventListener(
     "click",
     e=>{
-
         if(e.target===shopOverlay){
-
             closeShop()
-
         }
-
     }
 );
 
@@ -3055,16 +2873,13 @@ shopOverlay.addEventListener(
    摸良子 / 打良子
 ========================= */
 
-let petTimer=null;
-
-let petCooldown=false;
-
-let longPressTriggered=false;
-
-let lastTap=0;
+let petTimer=null,
+petCooldown=false,
+longPressTriggered=false,
+lastTap=0;
 
 
-/* 按住约1秒 */
+/* 按住约1秒 = 摸良子 */
 
 character.addEventListener(
     "pointerdown",
@@ -3089,55 +2904,48 @@ character.addEventListener(
 
         longPressTriggered=false;
 
-
         clearTimeout(
             petTimer
         );
 
 
-        petTimer=
-            setTimeout(
-                ()=>{
+        petTimer=setTimeout(
+            ()=>{
 
-                    longPressTriggered=
-                        true;
+                longPressTriggered=true;
 
-
-                    mood=
-                        clamp(
-                            mood+2
-                        );
-
-
-                    updateStats();
-
-
-                    showMessage(
-                        "摸摸良子 ❤️"
+                mood=
+                    clamp(
+                        mood+2
                     );
 
+                updateStats();
 
-                    saveGame();
+                showMessage(
+                    "摸摸良子 ❤️"
+                );
+
+                saveGame();
+
+                petCooldown=true;
 
 
-                    petCooldown=
-                        true;
+                setTimeout(
+                    ()=>{
+                        petCooldown=false
+                    },
+                    90000
+                )
 
-
-                    setTimeout(
-                        ()=>petCooldown=false,
-                        90000
-                    );
-
-                },
-                1000
-            );
+            },
+            1000
+        )
 
     }
 );
 
 
-/* 松开 */
+/* 松开时取消长按 */
 
 character.addEventListener(
     "pointerup",
@@ -3152,16 +2960,14 @@ character.addEventListener(
 
             lastTap=0;
 
-            longPressTriggered=
-                false;
+            longPressTriggered=false;
 
             return
 
         }
 
 
-        const now=
-            Date.now();
+        const now=Date.now();
 
 
         if(
@@ -3177,17 +2983,13 @@ character.addEventListener(
                     mood-5
                 );
 
-
             updateStats();
-
 
             showMessage(
                 "良子被打了……"
             );
 
-
             saveGame();
-
 
             lastTap=0
 
@@ -3217,8 +3019,6 @@ character.addEventListener(
 );
 
 
-/* 防止手机长按菜单 */
-
 character.addEventListener(
     "contextmenu",
     e=>{
@@ -3245,6 +3045,8 @@ function saveGame(){
 
             ink,
 
+            inventory,
+
             nextDecayTime
 
         })
@@ -3263,6 +3065,10 @@ function loadGame(){
         localStorage.getItem(
             GAME_KEY
         );
+
+
+    inventory=
+        createDefaultInventory();
 
 
     if(s){
@@ -3297,10 +3103,43 @@ function loadGame(){
                     :100;
 
 
+            if(
+                d.inventory &&
+                typeof d.inventory==="object"
+            ){
+
+                getAllItems().forEach(
+                    item=>{
+
+                        if(
+                            typeof
+                            d.inventory[item.name]
+                            ===
+                            "number"
+                        ){
+
+                            inventory[item.name]=
+                                Math.max(
+                                    0,
+                                    Math.floor(
+                                        d.inventory[
+                                            item.name
+                                        ]
+                                    )
+                                )
+
+                        }
+
+                    }
+                )
+
+            }
+
+
             nextDecayTime=
                 typeof d.nextDecayTime==="number"
                     ?d.nextDecayTime
-                    :Date.now()+DECAY_INTERVAL;
+                    :Date.now()+DECAY_INTERVAL
 
         }catch(e){}
 
@@ -3320,8 +3159,7 @@ function loadGame(){
 
 function checkDecay(){
 
-    const now=
-        Date.now();
+    const now=Date.now();
 
 
     if(now>=nextDecayTime){
@@ -3329,7 +3167,8 @@ function checkDecay(){
         const missed=
             Math.floor(
                 (
-                    now-nextDecayTime
+                    now-
+                    nextDecayTime
                 )/
                 DECAY_INTERVAL
             )+1;
@@ -3368,7 +3207,8 @@ function updateTimerDisplay(){
     const remain=
         Math.max(
             0,
-            nextDecayTime-Date.now()
+            nextDecayTime-
+            Date.now()
         );
 
 
@@ -3427,7 +3267,8 @@ function getSavedClothes(){
             JSON.parse(
                 localStorage.getItem(
                     CLOTHES_KEY
-                )||"[]"
+                )||
+                "[]"
             );
 
 
@@ -3444,7 +3285,7 @@ function getSavedClothes(){
                 item.id &&
                 item.name &&
                 item.data
-        );
+        )
 
     }catch(e){
 
@@ -3465,7 +3306,7 @@ function saveSavedClothes(arr){
 }
 
 
-/* 当前穿着 */
+/* 当前穿着的衣服 */
 
 function drawCurrentClothes(){
 
@@ -3518,8 +3359,7 @@ function applyClothesData(data){
 
     if(!data)return;
 
-    currentClothesData=
-        data;
+    currentClothesData=data;
 
     resizeMainClothesCanvas()
 
@@ -3528,12 +3368,9 @@ function applyClothesData(data){
 
 function clearMainClothes(){
 
-    currentClothesData=
-        null;
-
+    currentClothesData=null;
 
     resizeMainClothesCanvas();
-
 
     mainClothesCtx.clearRect(
         0,
@@ -3559,14 +3396,18 @@ function resizeMainClothesCanvas(){
     mainClothesCanvas.width=
         Math.max(
             1,
-            Math.round(r.width)
+            Math.round(
+                r.width
+            )
         );
 
 
     mainClothesCanvas.height=
         Math.max(
             1,
-            Math.round(r.height)
+            Math.round(
+                r.height
+            )
         );
 
 
@@ -3579,21 +3420,23 @@ function resizeMainClothesCanvas(){
 
 
     mainClothesCanvas.style.left=
-        (r.left-area.left)+"px";
+        (
+            r.left-
+            area.left
+        )+"px";
 
 
     mainClothesCanvas.style.top=
-        (r.top-area.top)+"px";
+        (
+            r.top-
+            area.top
+        )+"px";
 
 
     drawCurrentClothes()
 
 }
 
-
-/* =========================
-   显示保存衣服
-========================= */
 
 function renderSavedClothes(){
 
@@ -3638,10 +3481,8 @@ function renderSavedClothes(){
 
         img.src=item.data;
 
-
         img.onerror=()=>{
-            img.style.display=
-                "none"
+            img.style.display="none"
         };
 
 
@@ -3672,11 +3513,9 @@ function renderSavedClothes(){
                 item.data
             );
 
-
             loadDrawing(
                 item.data
             );
-
 
             showMessage(
                 "已穿上「"+
@@ -3779,7 +3618,6 @@ function renderSavedClothes(){
 
         card.appendChild(del);
 
-
         list.appendChild(card)
 
     })
@@ -3789,9 +3627,7 @@ function renderSavedClothes(){
 
 function openWardrobe(){
 
-    wardrobe.style.display=
-        "block";
-
+    wardrobe.style.display="block";
 
     renderSavedClothes();
 
@@ -3804,8 +3640,7 @@ function openWardrobe(){
 
 function closeWardrobe(){
 
-    wardrobe.style.display=
-        "none"
+    wardrobe.style.display="none"
 
 }
 
@@ -3841,14 +3676,18 @@ function resizeDrawingCanvas(){
     drawingCanvas.width=
         Math.max(
             1,
-            Math.round(r.width)
+            Math.round(
+                r.width
+            )
         );
 
 
     drawingCanvas.height=
         Math.max(
             1,
-            Math.round(r.height)
+            Math.round(
+                r.height
+            )
         );
 
 
@@ -3898,12 +3737,18 @@ function getDrawPosition(e){
     return{
 
         x:
-            (e.clientX-r.left)*
+            (
+                e.clientX-
+                r.left
+            )*
             drawingCanvas.width/
             r.width,
 
         y:
-            (e.clientY-r.top)*
+            (
+                e.clientY-
+                r.top
+            )*
             drawingCanvas.height/
             r.height
 
@@ -3952,7 +3797,9 @@ function startDrawing(e){
     );
 
 
-    if(drawTool==="eraser"){
+    if(
+        drawTool==="eraser"
+    ){
 
         drawingCtx.globalCompositeOperation=
             "destination-out";
@@ -3975,7 +3822,6 @@ function startDrawing(e){
 
     drawingCtx.globalCompositeOperation=
         "source-over";
-
 
     e.preventDefault()
 
@@ -4029,7 +3875,9 @@ drawingCanvas.addEventListener(
             "round";
 
 
-        if(drawTool==="eraser"){
+        if(
+            drawTool==="eraser"
+        ){
 
             drawingCtx.globalCompositeOperation=
                 "destination-out";
@@ -4049,6 +3897,7 @@ drawingCanvas.addEventListener(
 
 
         drawingCtx.stroke();
+
 
         drawingCtx.globalCompositeOperation=
             "source-over";
@@ -4088,7 +3937,7 @@ drawingCanvas.addEventListener(
 
 
 /* =========================
-   颜色
+   画笔
 ========================= */
 
 document.querySelectorAll(
@@ -4198,7 +4047,8 @@ document.getElementById(
     "click",
     ()=>{
 
-        if(!drawHistory.length)return;
+        if(!drawHistory.length)
+            return;
 
 
         drawingCtx.putImageData(
@@ -4257,7 +4107,8 @@ function saveClothes(){
         );
 
 
-    if(name===null)return;
+    if(name===null)
+        return;
 
 
     name=
@@ -4460,14 +4311,19 @@ function getLocalDateString(){
         );
 
 
-    return y+"-"+m+"-"+day
+    return y+
+        "-"+
+        m+
+        "-"+
+        day
 
 }
 
 
 function formatDate(s){
 
-    if(!s)return"-";
+    if(!s)
+        return"-";
 
 
     const p=
@@ -4475,11 +4331,9 @@ function formatDate(s){
 
 
     return p.length===3
-
         ?p[0]+"年"+
          Number(p[1])+"月"+
          Number(p[2])+"日"
-
         :s
 
 }
@@ -4487,7 +4341,8 @@ function formatDate(s){
 
 function calculateRaisedDays(start){
 
-    if(!start)return 1;
+    if(!start)
+        return 1;
 
 
     const a=
@@ -4507,7 +4362,8 @@ function calculateRaisedDays(start){
     return Math.max(
         1,
         Math.floor(
-            (b-a)/86400000
+            (b-a)/
+            86400000
         )+1
     )
 
@@ -4528,8 +4384,7 @@ function loadProfile(){
 
     if(!s){
 
-        liangziProfile=
-            null;
+        liangziProfile=null;
 
         return
 
@@ -4542,17 +4397,12 @@ function loadProfile(){
             JSON.parse(s);
 
 
-        if(!liangziProfile.name){
-
-            liangziProfile=
-                null
-
-        }
+        if(!liangziProfile.name)
+            liangziProfile=null
 
     }catch(e){
 
-        liangziProfile=
-            null
+        liangziProfile=null
 
     }
 
@@ -4686,7 +4536,8 @@ function closeProfile(){
 
 function updateProfileDisplay(){
 
-    if(!liangziProfile)return;
+    if(!liangziProfile)
+        return;
 
 
     document.getElementById(
@@ -4748,7 +4599,8 @@ function updateProfileDisplay(){
 
 function renameLiangzi(){
 
-    if(!liangziProfile)return;
+    if(!liangziProfile)
+        return;
 
 
     const n=
@@ -4758,7 +4610,8 @@ function renameLiangzi(){
         );
 
 
-    if(n===null)return;
+    if(n===null)
+        return;
 
 
     const t=
@@ -4776,7 +4629,8 @@ function renameLiangzi(){
     }
 
 
-    liangziProfile.name=t;
+    liangziProfile.name=
+        t;
 
 
     saveProfile();
@@ -4829,11 +4683,8 @@ document.getElementById(
     "keydown",
     e=>{
 
-        if(e.key==="Enter"){
-
+        if(e.key==="Enter")
             startLiangzi()
-
-        }
 
     }
 );
@@ -4864,10 +4715,8 @@ const closeGuideButton=
 guideButton.addEventListener(
     "click",
     ()=>{
-
         guideOverlay.style.display=
             "flex"
-
     }
 );
 
@@ -4875,10 +4724,8 @@ guideButton.addEventListener(
 closeGuideButton.addEventListener(
     "click",
     ()=>{
-
         guideOverlay.style.display=
             "none"
-
     }
 );
 
@@ -4887,7 +4734,10 @@ guideOverlay.addEventListener(
     "click",
     e=>{
 
-        if(e.target===guideOverlay){
+        if(
+            e.target===
+            guideOverlay
+        ){
 
             guideOverlay.style.display=
                 "none"
@@ -4899,38 +4749,23 @@ guideOverlay.addEventListener(
 
 
 /* =========================
-   离开页面保存
+   初始化
 ========================= */
 
 window.addEventListener(
     "beforeunload",
     ()=>{
-
         saveGame();
-
-        saveProfile();
-
-        saveInventory()
-
+        saveProfile()
     }
 );
 
-
-/* =========================
-   初始化
-========================= */
-
-initializeInventory();
 
 loadProfile();
 
 loadGame();
 
 renderSavedClothes();
-
-updateStats();
-
-updateTimerDisplay();
 
 
 if(!liangziProfile){
