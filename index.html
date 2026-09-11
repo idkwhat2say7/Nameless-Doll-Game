@@ -974,14 +974,10 @@ button:active{
 </div>
 
 
-<!-- 新增：右上角指南按钮 -->
-
 <button id="guideButton">
     📖 指南
 </button>
 
-
-<!-- 新增：指南弹窗 -->
 
 <div id="guideOverlay">
 
@@ -1433,7 +1429,8 @@ isDrawing=false,
 lastDrawX=0,
 lastDrawY=0,
 drawHistory=[],
-selectedClothesId=null;
+selectedClothesId=null,
+currentClothesData=null;
 
 
 /* 食物 */
@@ -1988,11 +1985,6 @@ character.addEventListener(
 
         clearTimeout(petTimer);
 
-        /*
-           如果刚刚完成了长按，
-           这一次 pointerup 不可以被当成双击。
-        */
-
         if(longPressTriggered){
 
             lastTap=0;
@@ -2001,10 +1993,6 @@ character.addEventListener(
             return
         }
 
-
-        /*
-           快速点两下 = 打良子
-        */
 
         const now=Date.now();
 
@@ -2185,17 +2173,32 @@ setInterval(
 );
 
 
-/* 衣柜 */
+/* =========================
+   衣柜
+========================= */
 
 function getSavedClothes(){
 
     try{
 
-        return JSON.parse(
-            localStorage.getItem(
-                CLOTHES_KEY
-            )||"[]"
-        )
+        const data=
+            JSON.parse(
+                localStorage.getItem(
+                    CLOTHES_KEY
+                )||"[]"
+            );
+
+        if(!Array.isArray(data)){
+            return[]
+        }
+
+        return data.filter(
+            item=>
+                item &&
+                item.id &&
+                item.name &&
+                item.data
+        );
 
     }catch(e){
 
@@ -2214,13 +2217,27 @@ function saveSavedClothes(arr){
 }
 
 
-function applyClothesData(data){
+/* 当前穿着的衣服 */
+
+function drawCurrentClothes(){
+
+    if(!currentClothesData){
+
+        mainClothesCtx.clearRect(
+            0,
+            0,
+            mainClothesCanvas.width,
+            mainClothesCanvas.height
+        );
+
+        return
+    }
+
 
     const img=new Image();
 
-    img.onload=()=>{
 
-        resizeMainClothesCanvas();
+    img.onload=()=>{
 
         mainClothesCtx.clearRect(
             0,
@@ -2238,11 +2255,24 @@ function applyClothesData(data){
         )
     };
 
-    img.src=data
+
+    img.src=currentClothesData
+}
+
+
+function applyClothesData(data){
+
+    if(!data)return;
+
+    currentClothesData=data;
+
+    resizeMainClothesCanvas()
 }
 
 
 function clearMainClothes(){
+
+    currentClothesData=null;
 
     resizeMainClothesCanvas();
 
@@ -2286,7 +2316,10 @@ function resizeMainClothesCanvas(){
         (r.left-area.left)+"px";
 
     mainClothesCanvas.style.top=
-        (r.top-area.top)+"px"
+        (r.top-area.top)+"px";
+
+
+    drawCurrentClothes()
 }
 
 
@@ -2326,6 +2359,10 @@ function renderSavedClothes(){
 
         img.src=item.data;
 
+        img.onerror=()=>{
+            img.style.display="none"
+        };
+
 
         const name=
             document.createElement("div");
@@ -2346,10 +2383,11 @@ function renderSavedClothes(){
 
         wear.onclick=()=>{
 
-            selectedClothesId=
-                item.id;
-
             applyClothesData(
+                item.data
+            );
+
+            loadDrawing(
                 item.data
             );
 
@@ -2447,11 +2485,6 @@ function openWardrobe(){
     renderSavedClothes();
 
     resizeDrawingCanvas();
-
-    /*
-       打开衣柜时回到最上面，
-       之后手机可以正常往下滑。
-    */
 
     wardrobe.scrollTop=0
 }
@@ -2844,6 +2877,11 @@ function saveClothes(){
         getSavedClothes();
 
 
+    /*
+       如果正在修改已有衣服，
+       就修改原本那一套。
+    */
+
     if(selectedClothesId){
 
         const i=
@@ -2881,6 +2919,24 @@ function saveClothes(){
     }
 
 
+    /*
+       最多保存三套衣服
+    */
+
+    if(clothes.length>=3){
+
+        showMessage(
+            "衣柜最多只能保存 3 套衣服 👕"
+        );
+
+        return
+    }
+
+
+    /*
+       新建一套衣服
+    */
+
     const item={
 
         id:
@@ -2898,12 +2954,20 @@ function saveClothes(){
 
     clothes.push(item);
 
-    selectedClothesId=
-        item.id;
 
     saveSavedClothes(
         clothes
     );
+
+
+    /*
+       新衣服保存成功后，
+       清除 selectedClothesId，
+       下一次保存会新增而不是覆盖这一套。
+    */
+
+    selectedClothesId=null;
+
 
     applyClothesData(
         data
