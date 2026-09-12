@@ -1,7 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
 
 <title>良子养成游戏</title>
@@ -9,1481 +13,2478 @@
 <style>
 
 *{
+
     box-sizing:border-box;
+
     -webkit-tap-highlight-color:transparent
+
 }
 
 body{
+
     margin:0;
+
     padding:0;
+
     width:100vw;
+
     height:100vh;
+
     background:url("room.png") center center/cover no-repeat;
+
     font-family:Arial,sans-serif;
+
     overflow:hidden;
+
     touch-action:none;
+
     transition:background-image .3s ease
+
 }
 
 .game{
+
     width:100%;
+
     height:100%;
+
     position:relative;
+
     text-align:center
+
 }
 
 h1{
+
     margin:0;
+
     padding-top:25px;
+
     font-size:36px;
+
     color:#333
+
 }
 
 .subtitle{
+
     margin-top:5px;
+
     font-size:18px;
+
     color:#555
+
 }
 
-
 /* =========================
+
    状态
+
 ========================= */
 
 .stats{
+
     position:absolute;
+
     top:105px;
+
     left:50%;
+
     transform:translateX(-50%);
+
     width:300px;
+
     background:rgba(255,255,255,.8);
+
     padding:10px 16px;
+
     border-radius:18px;
+
     border:2px solid #777
+
 }
 
 .stat{
+
     margin:5px 0;
+
     font-size:17px
+
 }
 
 .bar{
+
     width:100%;
+
     height:12px;
+
     background:#ddd;
+
     border-radius:10px;
+
     overflow:hidden;
+
     margin-top:3px
+
 }
 
 .fill{
+
     height:100%;
+
     width:50%;
+
     background:#777;
+
     transition:width .3s
+
 }
 
 .time-text{
+
     margin-top:7px;
+
     font-size:13px;
+
     color:#666
+
 }
 
-
 /* =========================
+
    良子
+
 ========================= */
 
 .character-area{
+
     position:absolute;
+
     top:250px;
+
     left:50%;
+
     transform:translateX(-50%);
+
     width:300px;
+
     height:300px;
+
     display:flex;
+
     justify-content:center;
+
     align-items:center
+
 }
 
 .character{
+
     width:220px;
+
     max-height:280px;
+
     object-fit:contain;
+
     user-select:none;
+
     -webkit-user-select:none;
+
     -webkit-touch-callout:none;
+
     cursor:pointer;
+
     touch-action:none
+
 }
 
 .question-mark{
+
     position:absolute;
+
     top:-20px;
+
     right:15px;
+
     font-size:70px;
+
     font-weight:bold;
+
     color:#555;
+
     display:none;
+
     z-index:10;
+
     animation:questionPop .4s ease-out
+
 }
 
 @keyframes questionPop{
 
     0%{
+
         transform:scale(0)
+
     }
 
     70%{
+
         transform:scale(1.2)
+
     }
 
     100%{
+
         transform:scale(1)
+
     }
 
 }
 
-
 /* =========================
+
    食物 / 洗澡物品
+
 ========================= */
 
 .choice-area{
+
     position:absolute;
+
     bottom:87px;
+
     left:50%;
+
     transform:translateX(-50%);
+
     display:none;
+
     gap:7px;
+
     align-items:center;
+
     background:rgba(255,255,255,.85);
+
     padding:6px 9px;
+
     border-radius:14px;
+
     border:2px solid #777;
+
     max-width:95vw;
+
     flex-wrap:wrap;
+
     justify-content:center
+
 }
 
 .choice-box{
+
     text-align:center;
+
     width:60px
+
 }
 
 .choice-item{
+
     width:45px;
+
     height:45px;
+
     object-fit:contain;
+
     cursor:grab;
+
     user-select:none;
+
     -webkit-user-select:none;
+
     -webkit-touch-callout:none;
+
     touch-action:none
+
 }
 
 .choice-name{
+
     font-size:11px;
+
     margin-top:2px;
+
     line-height:1.2
+
 }
 
 .choice-count{
+
     font-size:10px;
+
     color:#555;
+
     margin-top:3px
+
 }
 
-
 /* =========================
+
    按钮
+
 ========================= */
 
 .buttons{
+
     position:absolute;
+
     bottom:35px;
+
     left:50%;
+
     transform:translateX(-50%);
+
     display:flex;
+
     gap:8px;
+
     align-items:center;
+
     justify-content:center;
+
     flex-wrap:wrap;
+
     max-width:95vw
+
 }
 
 button{
+
     padding:8px 14px;
+
     font-size:14px;
+
     border:2px solid #777;
+
     border-radius:15px;
+
     background:rgba(255,255,255,.9);
+
     cursor:pointer;
+
     touch-action:manipulation
+
 }
 
 button:active{
+
     transform:scale(.95)
+
 }
 
 #homeButton{
+
     display:none
+
 }
 
-
 /* =========================
+
    墨迹
+
 ========================= */
 
 #currencyDisplay{
+
     position:fixed;
+
     top:20px;
+
     right:115px;
+
     z-index:900;
+
     padding:9px 13px;
+
     font-size:15px;
+
     border:2px solid #777;
+
     border-radius:14px;
+
     background:rgba(255,255,255,.9);
+
     box-shadow:0 2px 8px rgba(0,0,0,.12);
+
     white-space:nowrap
+
 }
 
-
 /* =========================
+
    消息
+
 ========================= */
 
 #message{
+
     position:absolute;
+
     top:45%;
+
     left:50%;
+
     transform:translate(-50%,-50%);
+
     background:rgba(255,255,255,.95);
+
     border:2px solid #777;
+
     border-radius:18px;
+
     padding:15px 25px;
+
     font-size:20px;
+
     color:#333;
+
     display:none;
+
     z-index:1500;
+
     box-shadow:0 4px 15px rgba(0,0,0,.2);
+
     max-width:90vw
+
 }
 
 #dialogue{
+
     position:absolute;
+
     top:185px;
+
     left:50%;
+
     transform:translateX(-50%);
+
     background:white;
+
     border:3px solid #555;
+
     border-radius:20px;
+
     padding:15px 25px;
+
     font-size:20px;
+
     color:#333;
+
     display:none;
+
     z-index:50;
+
     min-width:280px;
+
     max-width:90vw
+
 }
 
-
 /* =========================
+
    拖动物品
+
 ========================= */
 
 .drag-item{
+
     position:fixed;
+
     width:80px;
+
     height:80px;
+
     object-fit:contain;
+
     pointer-events:none;
+
     z-index:999;
+
     transform:translate(-50%,-50%) scale(1.1);
+
     opacity:.85
+
 }
 
-
 /* =========================
+
    衣柜
+
 ========================= */
 
 .clothes-canvas{
+
     position:absolute;
+
     left:0;
+
     top:0;
+
     z-index:2;
+
     pointer-events:none
+
 }
 
 #wardrobe{
+
     position:fixed;
+
     inset:0;
+
     z-index:1000;
+
     display:none;
+
     background:rgba(245,245,245,.97);
+
     overflow-y:auto;
+
     overflow-x:hidden;
+
     -webkit-overflow-scrolling:touch;
+
     touch-action:auto
+
 }
 
 #wardrobe-content{
+
     min-height:max-content;
+
     display:flex;
+
     flex-direction:column;
+
     align-items:center;
+
     justify-content:flex-start;
+
     padding:25px 15px 30px
+
 }
 
 #wardrobe-title{
+
     font-size:28px;
+
     font-weight:bold;
+
     color:#333;
+
     margin-bottom:5px
+
 }
 
 #wardrobe-hint{
+
     font-size:14px;
+
     color:#666;
+
     margin-bottom:12px;
+
     text-align:center
+
 }
 
 #saved-wardrobe{
+
     width:min(95vw,520px);
+
     margin:0 auto 12px;
+
     padding:12px;
+
     background:white;
+
     border:2px solid #777;
+
     border-radius:18px;
+
     box-sizing:border-box
+
 }
 
 #saved-wardrobe-title{
+
     font-weight:bold;
+
     text-align:center;
+
     margin-bottom:10px;
+
     color:#444
+
 }
 
 #saved-clothes-list{
+
     display:flex;
+
     gap:10px;
+
     overflow-x:auto;
+
     padding:3px;
+
     scrollbar-width:thin
+
 }
 
 .saved-clothes-card{
+
     flex:0 0 105px;
+
     background:#f7f7f7;
+
     border:1px solid #bbb;
+
     border-radius:12px;
+
     padding:6px;
+
     text-align:center
+
 }
 
 .saved-clothes-card img{
+
     width:92px;
+
     height:117px;
+
     object-fit:contain;
+
     background:white;
+
     border-radius:9px;
+
     border:1px solid #ddd
+
 }
 
 .saved-clothes-name{
+
     font-size:12px;
+
     margin:5px 0;
+
     white-space:nowrap;
+
     overflow:hidden;
+
     text-overflow:ellipsis
+
 }
 
 .saved-clothes-card button{
+
     font-size:11px;
+
     padding:5px 7px;
+
     margin:2px
+
 }
 
 .saved-empty{
+
     width:100%;
+
     text-align:center;
+
     color:#888;
+
     font-size:13px;
+
     padding:8px 0
+
 }
 
 #drawing-area{
+
     position:relative;
+
     width:min(220px,60vw);
+
     aspect-ratio:220/280;
+
     background:white;
+
     border:2px solid #777;
+
     border-radius:18px;
+
     overflow:hidden;
+
     box-shadow:0 4px 15px rgba(0,0,0,.18);
+
     touch-action:none;
+
     flex-shrink:0
+
 }
 
 #drawing-character{
+
     position:absolute;
+
     inset:0;
+
     width:100%;
+
     height:100%;
+
     object-fit:contain;
+
     pointer-events:none;
+
     z-index:1
+
 }
 
 #drawing-canvas{
+
     position:absolute;
+
     inset:0;
+
     width:100%;
+
     height:100%;
+
     z-index:2;
+
     touch-action:none
+
 }
 
 #clothing-guide{
+
     position:absolute;
+
     left:22%;
+
     top:38%;
+
     width:56%;
+
     height:43%;
+
     border:2px dashed rgba(80,80,80,.35);
+
     border-radius:35px;
+
     pointer-events:none;
+
     z-index:3
+
 }
 
 #clothing-guide span{
+
     position:absolute;
+
     left:0;
+
     bottom:4px;
+
     width:100%;
+
     text-align:center;
+
     font-size:10px;
+
     color:rgba(80,80,80,.55)
+
 }
 
 #drawing-tools{
+
     width:min(95vw,520px);
+
     margin-top:12px;
+
     padding:12px;
+
     background:white;
+
     border:2px solid #777;
+
     border-radius:18px;
+
     flex-shrink:0
+
 }
 
 .drawing-tool-row{
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     flex-wrap:wrap;
+
     gap:8px;
+
     margin-bottom:9px
+
 }
 
 .drawing-tool-row:last-child{
+
     margin-bottom:0
+
 }
 
 .color-btn{
+
     width:30px;
+
     height:30px;
+
     padding:0;
+
     border-radius:50%;
+
     border:2px solid white;
+
     box-shadow:0 1px 5px rgba(0,0,0,.25)
+
 }
 
 #custom-color{
+
     width:38px;
+
     height:32px;
+
     padding:0;
+
     border:none;
+
     background:transparent
+
 }
 
 #brush-size{
+
     width:130px
+
 }
 
 #brush-size-text{
+
     min-width:22px;
+
     text-align:center
+
 }
 
 .drawing-tool-button.active{
+
     outline:3px solid #555
+
 }
 
 #wardrobe-actions{
+
     display:flex;
+
     justify-content:center;
+
     flex-wrap:wrap;
+
     gap:12px;
+
     margin-top:12px;
+
     padding-bottom:10px;
+
     flex-shrink:0
+
 }
 
-
 /* =========================
+
    指南
+
 ========================= */
 
 #guideButton{
+
     position:fixed;
+
     top:20px;
+
     right:20px;
+
     z-index:900;
+
     padding:9px 13px;
+
     font-size:15px;
+
     border:2px solid #777;
+
     border-radius:14px;
+
     background:rgba(255,255,255,.9);
+
     box-shadow:0 2px 8px rgba(0,0,0,.12)
+
 }
 
 #guideOverlay{
+
     position:fixed;
+
     inset:0;
+
     z-index:1300;
+
     display:none;
+
     align-items:center;
+
     justify-content:center;
+
     background:rgba(0,0,0,.4);
+
     padding:18px
+
 }
 
 #guideBox{
+
     width:min(500px,94vw);
+
     max-height:88vh;
+
     overflow-y:auto;
+
     -webkit-overflow-scrolling:touch;
+
     background:rgba(255,255,255,.98);
+
     border:2px solid #777;
+
     border-radius:22px;
+
     padding:22px 20px;
+
     box-shadow:0 6px 25px rgba(0,0,0,.25);
+
     touch-action:auto
+
 }
 
 #guideTitle{
+
     text-align:center;
+
     font-size:27px;
+
     font-weight:bold;
+
     color:#333;
+
     margin-bottom:16px
+
 }
 
 .guide-section{
+
     text-align:left;
+
     background:#f7f7f7;
+
     border:1px solid #ddd;
+
     border-radius:15px;
+
     padding:12px 14px;
+
     margin-bottom:11px
+
 }
 
 .guide-section-title{
+
     font-size:18px;
+
     font-weight:bold;
+
     color:#444;
+
     margin-bottom:7px
+
 }
 
 .guide-line{
+
     font-size:14px;
+
     color:#555;
+
     line-height:1.65
+
 }
 
 .guide-good{
+
     color:#333;
+
     font-weight:bold
+
 }
 
 #closeGuideButton{
+
     display:block;
+
     margin:15px auto 0
+
 }
 
-
 /* =========================
+
    商城
+
 ========================= */
 
 #shopOverlay{
+
     position:fixed;
+
     inset:0;
+
     z-index:1400;
+
     display:none;
+
     align-items:center;
+
     justify-content:center;
+
     background:rgba(0,0,0,.4);
+
     padding:15px
+
 }
 
 #shopBox{
+
     width:min(650px,94vw);
+
     max-height:88vh;
+
     overflow-y:auto;
+
     background:rgba(255,255,255,.98);
+
     border:2px solid #777;
+
     border-radius:22px;
+
     padding:20px;
+
     box-shadow:0 6px 25px rgba(0,0,0,.25);
+
     touch-action:auto
+
 }
 
 #shopTitle{
+
     text-align:center;
+
     font-size:28px;
+
     font-weight:bold;
+
     color:#333;
+
     margin-bottom:8px
+
 }
 
 #shopMoney{
+
     text-align:center;
+
     font-size:17px;
+
     margin-bottom:15px
+
 }
 
 .shop-section{
+
     margin-bottom:16px
+
 }
 
 .shop-section-title{
+
     font-size:19px;
+
     font-weight:bold;
+
     margin-bottom:9px;
+
     text-align:left;
+
     color:#444
+
 }
 
 .shop-grid{
+
     display:grid;
+
     grid-template-columns:repeat(5,1fr);
+
     gap:8px
+
 }
 
 .shop-card{
+
     background:#f8f8f8;
+
     border:1px solid #ccc;
+
     border-radius:13px;
+
     padding:8px 5px;
+
     text-align:center
+
 }
 
 .shop-card img{
+
     width:65px;
+
     height:65px;
+
     object-fit:contain
+
 }
 
 .shop-card-name{
+
     font-size:12px;
+
     min-height:32px;
+
     display:flex;
+
     justify-content:center;
+
     align-items:center;
+
     line-height:1.3
+
 }
 
 .shop-card-price{
+
     font-size:12px;
+
     color:#666;
+
     margin:4px 0
+
 }
 
 .shop-card-owned{
+
     font-size:11px;
+
     color:#555;
+
     margin-bottom:5px
+
 }
 
 .shop-buy{
+
     padding:5px 8px;
+
     font-size:12px;
+
     border-radius:9px
+
 }
 
 #closeShopButton{
+
     display:block;
+
     margin:8px auto 0
+
 }
 
-
 /* =========================
+
    Profile
+
 ========================= */
 
 #profileOverlay,
+
 #nameOverlay{
+
     position:fixed;
+
     inset:0;
+
     z-index:1200;
+
     display:none;
+
     align-items:center;
+
     justify-content:center;
+
     background:rgba(0,0,0,.35);
+
     padding:20px
+
 }
 
 #profileBox,
+
 #nameBox{
+
     width:min(360px,92vw);
+
     background:rgba(255,255,255,.97);
+
     border:2px solid #777;
+
     border-radius:20px;
+
     padding:22px;
+
     box-shadow:0 6px 25px rgba(0,0,0,.22)
+
 }
 
 #profileTitle,
+
 #nameTitle{
+
     font-size:25px;
+
     font-weight:bold;
+
     color:#333;
+
     text-align:center;
+
     margin-bottom:15px
+
 }
 
 .profile-row{
+
     display:flex;
+
     justify-content:space-between;
+
     gap:15px;
+
     padding:9px 4px;
+
     border-bottom:1px solid #ddd;
+
     font-size:16px
+
 }
 
 .profile-row:last-of-type{
+
     border-bottom:none
+
 }
 
 .profile-label{
+
     color:#666
+
 }
 
 .profile-value{
+
     font-weight:bold;
+
     color:#333
+
 }
 
 .profile-actions{
+
     display:flex;
+
     justify-content:center;
+
     gap:10px;
+
     flex-wrap:wrap;
+
     margin-top:16px
+
 }
 
 #authorCredit{
+
     margin-top:10px;
+
     text-align:center;
+
     font-size:12px;
+
     color:#888
+
 }
 
 #nameInput{
+
     width:100%;
+
     padding:12px;
+
     border:2px solid #aaa;
+
     border-radius:12px;
+
     font-size:17px;
+
     text-align:center;
+
     outline:none
+
 }
 
 #nameHint{
+
     font-size:13px;
+
     color:#777;
+
     text-align:center;
+
     margin:8px 0 12px
+
 }
 
-
 /* =========================
+
    手机端
+
 ========================= */
 
 @media(max-width:600px){
 
     body{
+
         height:100dvh;
+
         min-height:100dvh
+
     }
 
     h1{
+
         padding-top:12px;
+
         font-size:26px
+
     }
 
     .subtitle{
+
         margin-top:3px;
+
         font-size:14px
+
     }
 
     .stats{
+
         top:70px;
+
         width:min(300px,92vw);
+
         padding:7px 12px;
+
         border-radius:15px
+
     }
 
     .stat{
+
         margin:3px 0;
+
         font-size:14px
+
     }
 
     .bar{
+
         height:9px
+
     }
 
     .time-text{
+
         margin-top:5px;
+
         font-size:11px
+
     }
 
     .character-area{
+
         top:225px;
+
         width:min(280px,72vw);
+
         height:min(270px,40vh)
+
     }
 
     .character{
+
         width:min(220px,60vw);
+
         max-height:230px
+
     }
 
     .question-mark{
+
         top:-15px;
+
         right:0;
+
         font-size:55px
+
     }
 
     #dialogue{
+
         top:170px;
+
         font-size:17px;
+
         padding:12px 18px;
+
         min-width:230px
+
     }
 
     #message{
-        font-size:17px;
-        padding:12px 18px
-    }
 
+        font-size:17px;
+
+        padding:12px 18px
+
+    }
 
     /* 手机物品栏 */
 
     .choice-area{
+
         bottom:82px;
+
         gap:5px;
+
         padding:7px 8px;
+
         border-radius:15px;
+
         width:auto;
+
         max-width:94vw;
+
         display:none;
+
         max-height:235px;
+
         overflow-y:auto;
+
         align-items:start;
+
         justify-content:center
+
     }
 
     .choice-area .choice-box{
+
         width:58px;
+
         flex:0 0 58px
+
     }
 
     .choice-item{
+
         width:45px;
+
         height:45px
+
     }
 
     .choice-name{
+
         font-size:9px;
+
         min-height:24px
+
     }
 
     .choice-count{
-        font-size:8px
-    }
 
+        font-size:8px
+
+    }
 
     /* 手机按钮 */
 
     .buttons{
+
         bottom:calc(7px + env(safe-area-inset-bottom));
+
         gap:4px;
+
         width:96vw;
+
         max-width:96vw;
+
         z-index:20
+
     }
 
     button{
-        padding:6px 9px;
-        font-size:12px;
-        border-radius:12px
-    }
 
+        padding:6px 9px;
+
+        font-size:12px;
+
+        border-radius:12px
+
+    }
 
     /* 手机墨迹 */
 
     #currencyDisplay{
-        top:10px;
-        right:85px;
-        padding:7px 10px;
-        font-size:13px;
-        border-radius:12px
-    }
 
+        top:10px;
+
+        right:85px;
+
+        padding:7px 10px;
+
+        font-size:13px;
+
+        border-radius:12px
+
+    }
 
     /* 衣柜 */
 
     #wardrobe{
+
         overflow-y:auto;
+
         overflow-x:hidden;
+
         -webkit-overflow-scrolling:touch;
+
         touch-action:auto
+
     }
 
     #wardrobe-content{
+
         padding-top:15px;
+
         padding-bottom:40px;
+
         min-height:max-content
+
     }
 
     #wardrobe-title{
+
         font-size:24px
+
     }
 
     #wardrobe-hint{
+
         font-size:12px
+
     }
 
     #drawing-tools{
+
         padding:9px
+
     }
 
     #wardrobe-actions button{
-        padding:10px 16px;
-        font-size:14px
-    }
 
+        padding:10px 16px;
+
+        font-size:14px
+
+    }
 
     /* 指南 */
 
     #guideButton{
+
         top:10px;
+
         right:10px;
+
         padding:7px 10px;
+
         font-size:13px;
+
         border-radius:12px
+
     }
 
     #guideBox{
+
         width:94vw;
+
         max-height:88vh;
+
         padding:18px 14px;
+
         border-radius:18px
+
     }
 
     #guideTitle{
+
         font-size:23px;
+
         margin-bottom:12px
+
     }
 
     .guide-section{
+
         padding:10px 11px;
+
         margin-bottom:9px
+
     }
 
     .guide-section-title{
+
         font-size:16px
+
     }
 
     .guide-line{
-        font-size:13px;
-        line-height:1.6
-    }
 
+        font-size:13px;
+
+        line-height:1.6
+
+    }
 
     /* 手机商城 */
 
     #shopBox{
+
         width:94vw;
+
         max-height:88vh;
+
         padding:14px
+
     }
 
     #shopTitle{
+
         font-size:23px
+
     }
 
     #shopMoney{
+
         font-size:15px
+
     }
 
     .shop-grid{
+
         grid-template-columns:repeat(3,1fr);
+
         gap:7px
+
     }
 
     .shop-card{
+
         padding:6px 3px
+
     }
 
     .shop-card img{
+
         width:55px;
+
         height:55px
+
     }
 
     .shop-card-name{
+
         font-size:10px
+
     }
 
     .shop-card-price{
+
         font-size:10px
+
     }
 
     .shop-card-owned{
+
         font-size:9px
+
     }
 
     .shop-buy{
+
         padding:5px 7px;
+
         font-size:10px
+
     }
 
 }
 
-
 /* =========================
+
    手机比较矮
+
 ========================= */
 
 @media(max-width:600px) and (max-height:700px){
 
     h1{
+
         padding-top:8px;
+
         font-size:23px
+
     }
 
     .stats{
+
         top:55px
+
     }
 
     .character-area{
+
         top:190px;
+
         height:230px
+
     }
 
     .character{
+
         max-height:200px
+
     }
 
     #dialogue{
+
         top:140px
+
     }
 
     .choice-area{
+
         bottom:88px;
+
         max-height:205px
+
     }
 
     .buttons{
+
         bottom:calc(5px + env(safe-area-inset-bottom))
+
     }
 
 }
 
-
-
 /* =========================
+
    小游戏入口
+
 ========================= */
 
 #miniGameButton{
+
     position:fixed;
+
     left:14px;
+
     top:50%;
+
     transform:translateY(-50%);
+
     z-index:1100;
+
     width:60px;
+
     height:60px;
+
     border:none;
+
     background:transparent;
+
     padding:0;
+
     display:flex;
+
     flex-direction:column;
+
     align-items:center;
+
     justify-content:center;
+
     cursor:pointer;
+
     filter:drop-shadow(0 2px 4px rgba(0,0,0,.16))
+
 }
 
 #miniGameButton .game-icon{
+
     width:56px;
+
     height:43px;
+
     border:3px solid #555;
+
     border-radius:13px;
+
     background:#fff;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     font-size:25px;
+
     box-sizing:border-box
+
 }
 
 #miniGameButton .game-icon::after{
+
     content:"";
+
     position:absolute;
+
     width:10px;
+
     height:10px;
+
     border-radius:50%;
+
     background:#777;
+
     margin-left:28px;
+
     margin-top:-18px
+
 }
 
 #miniGameButton:active{
+
     transform:translateY(-50%) scale(.94)
+
 }
 
 #miniGameOverlay{
+
     position:fixed;
+
     inset:0;
+
     z-index:1600;
+
     display:none;
+
     align-items:center;
+
     justify-content:center;
+
     background:rgba(0,0,0,.4);
+
     padding:14px
+
 }
 
 #miniGameBox{
+
     width:min(500px,92vw);
+
     max-height:82vh;
+
     overflow-y:auto;
+
     background:rgba(255,255,255,.97);
+
     border:2px solid #777;
+
     border-radius:20px;
+
     padding:15px;
+
     box-shadow:0 6px 25px rgba(0,0,0,.22);
+
     box-sizing:border-box
+
 }
 
 #miniGameTitle{
+
     display:none
+
 }
 
 #miniGameLimit{
+
     text-align:center;
+
     font-size:13px;
+
     color:#666;
+
     margin-bottom:10px
+
 }
 
 .mini-game-list{
+
     display:grid;
+
     grid-template-columns:1fr 1fr;
+
     gap:12px
+
 }
 
 .mini-game-card{
+
     border:2px solid #aaa;
+
     border-radius:16px;
+
     background:#fafafa;
+
     padding:9px;
+
     cursor:pointer;
+
     text-align:center;
+
     transition:transform .15s,box-shadow .15s
+
 }
 
 .mini-game-card:hover{
+
     transform:translateY(-2px);
+
     box-shadow:0 4px 12px rgba(0,0,0,.12)
+
 }
 
 .mini-game-card:active{
+
     transform:scale(.98)
+
 }
 
 .mini-game-art{
+
     height:125px;
+
     border-radius:12px;
+
     overflow:hidden;
+
     position:relative;
+
     background:#e9e9e9;
+
     border:1px solid #ccc
+
 }
 
 .memory-art{
+
     display:grid;
+
     grid-template-columns:repeat(3,1fr);
+
     gap:5px;
+
     padding:9px;
+
     box-sizing:border-box
+
 }
 
 .memory-art .tile{
+
     border-radius:7px;
+
     background:#ddd;
+
     border:1px solid #bbb;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     font-size:18px
+
 }
 
 .memory-art .tile.active{
+
     background:#cfcfcf;
+
     border:2px solid #777
+
 }
 
 .memory-art img{
+
     width:52px;
+
     height:52px;
+
     object-fit:contain
+
 }
 
 .catch-art{
+
     background:linear-gradient(#e8e8e8 0 65%,#d8d8d8 65% 100%);
+
 }
 
 .catch-art img{
+
     position:absolute;
+
     width:65px;
+
     height:65px;
+
     object-fit:contain;
+
     left:50%;
+
     bottom:18px;
+
     transform:translateX(-50%);
+
 }
 
 .falling-item{
+
     position:absolute;
+
     font-size:23px
+
 }
 
 .falling-one{left:16%;top:15%}
+
 .falling-two{left:50%;top:5%}
+
 .falling-three{right:13%;top:22%}
 
 .mini-game-name{
+
     font-size:16px;
+
     font-weight:bold;
+
     margin-top:8px;
+
     color:#333
+
 }
 
 .mini-game-desc{
+
     font-size:11px;
+
     color:#777;
+
     margin-top:3px;
+
     line-height:1.35
+
 }
 
 #memoryOverlay{
+
     position:fixed;
+
     inset:0;
+
     z-index:1700;
+
     display:none;
+
     align-items:center;
+
     justify-content:center;
+
     background:rgba(0,0,0,.45);
+
     padding:14px
+
 }
 
 #memoryBox{
+
     width:min(390px,92vw);
+
     background:rgba(255,255,255,.98);
+
     border:2px solid #777;
+
     border-radius:20px;
+
     padding:18px;
+
     text-align:center;
+
     box-sizing:border-box
+
 }
 
 #memoryTitle{
+
     font-size:21px;
+
     font-weight:bold;
+
     margin-bottom:5px
+
 }
 
 #memoryStatus{
+
     font-size:13px;
+
     color:#666;
+
     min-height:20px;
+
     margin-bottom:10px
+
 }
 
 #memoryBoard{
+
     width:min(360px,86vw);
+
     margin:0 auto 12px;
+
     display:grid;
+
     grid-template-columns:repeat(6,1fr);
+
     gap:5px
+
 }
 
 .memory-cell{
+
     aspect-ratio:1;
+
     border:2px solid #aaa;
+
     border-radius:10px;
+
     background:#e3e3e3;
+
     cursor:pointer;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     font-size:20px;
+
     user-select:none;
+
     -webkit-tap-highlight-color:transparent
+
 }
 
 .memory-cell.pattern{
+
     background:#cfcfcf;
+
     border-color:#666
+
 }
 
 .memory-cell.correct{
+
     background:#d7d7d7;
+
     border-color:#555
+
 }
 
 .memory-cell.wrong{
+
     background:#eee;
+
     border-color:#999
+
 }
 
 #memoryActions{
+
     display:flex;
+
     justify-content:center;
+
     gap:8px;
+
     flex-wrap:wrap
+
 }
 
 #memoryActions button,
+
 #miniGameCloseButton{
+
     padding:9px 14px;
+
     border:2px solid #777;
+
     border-radius:12px;
+
     background:#fff;
+
     cursor:pointer
+
 }
 
 #miniGameCloseButton{
+
     display:block;
+
     margin:13px auto 0
+
 }
 
 @media(max-width:600px){
+
     #miniGameButton{
+
         left:6px;
+
         width:52px;
+
         height:54px
+
     }
 
     #miniGameButton .game-icon{
+
         width:47px;
+
         height:35px;
+
         border-width:2px;
+
         border-radius:9px;
+
         font-size:19px
+
     }
 
     #miniGameButton .game-icon::after{
+
         width:6px;
+
         height:6px;
+
         margin-left:22px;
+
         margin-top:-14px
+
     }
 
     #miniGameBox{
+
         width:90vw;
+
         max-height:72vh;
+
         padding:10px;
+
         border-radius:15px
+
     }
 
     #miniGameTitle{
+
         display:none
+
     }
 
     .mini-game-list{
+
         gap:8px
+
     }
 
     .mini-game-card{
+
         padding:6px;
+
         border-radius:12px
+
     }
 
     .mini-game-art{
+
         height:100px;
+
         border-radius:9px
+
     }
 
     .memory-art{
+
         gap:3px;
+
         padding:6px
+
     }
 
     .memory-art img{
+
         width:38px;
+
         height:38px
+
     }
 
     .catch-art img{
+
         width:48px;
+
         height:48px;
+
         bottom:10px
+
     }
 
     .falling-item{
+
         font-size:18px
+
     }
 
     .mini-game-name{
+
         font-size:14px;
+
         margin-top:5px
+
     }
 
     .mini-game-desc{
+
         font-size:9px
+
     }
 
     #memoryBox{
+
         width:94vw;
+
         padding:12px
+
     }
 
     .memory-cell{
+
         border-width:1px;
+
         border-radius:7px;
+
         font-size:17px
+
     }
 
     #memoryBoard{
+
         width:min(350px,88vw);
+
         gap:4px
+
     }
+
 }
 
 </style>
-</head>
 
+</head>
 
 <body>
 
@@ -1492,215 +2493,309 @@ button:active{
     <h1>良子养成游戏</h1>
 
     <div class="subtitle">
-        不照顾好就撞飞你
-    </div>
 
+        不照顾好就撞飞你
+
+    </div>
 
     <!-- 状态栏 -->
 
     <div class="stats">
 
         <div class="stat">
+
             🍚 饱腹度：
+
             <span id="hunger-text">50</span>
+
         </div>
 
         <div class="bar">
+
             <div
+
                 id="hunger-fill"
+
                 class="fill"
+
             ></div>
+
         </div>
 
-
         <div class="stat">
+
             🛁 清洁度：
+
             <span id="clean-text">50</span>
+
         </div>
 
         <div class="bar">
-            <div
-                id="clean-fill"
-                class="fill"
-            ></div>
-        </div>
 
+            <div
+
+                id="clean-fill"
+
+                class="fill"
+
+            ></div>
+
+        </div>
 
         <div class="stat">
+
             ❤️ 心情：
+
             <span id="mood-text">50</span>
+
         </div>
 
         <div class="bar">
-            <div
-                id="mood-fill"
-                class="fill"
-            ></div>
-        </div>
 
+            <div
+
+                id="mood-fill"
+
+                class="fill"
+
+            ></div>
+
+        </div>
 
         <div class="time-text">
+
             下一次状态下降：
+
             <span id="timer-text">05:00</span>
+
         </div>
 
     </div>
-
 
     <!-- 良子 -->
 
     <div class="character-area">
 
         <img
+
             id="character"
+
             class="character"
+
             src="character.png"
+
             draggable="false"
+
         >
 
         <canvas
+
             id="mainClothesCanvas"
+
             class="clothes-canvas"
+
         ></canvas>
 
         <div
+
             id="questionMark"
+
             class="question-mark"
+
         >
+
             ❓
+
         </div>
 
     </div>
 
-
     <!-- 食物 / 洗澡物品 -->
 
     <div
-        id="choiceArea"
-        class="choice-area"
-    ></div>
 
+        id="choiceArea"
+
+        class="choice-area"
+
+    ></div>
 
     <div id="message"></div>
 
     <div id="dialogue"></div>
-
 
     <!-- 底部按钮 -->
 
     <div class="buttons">
 
         <button id="foodButton">
+
             🍽️ 食物
+
         </button>
 
         <button id="bathButton">
+
             🛁 洗澡
+
         </button>
 
         <button id="shopButton">
+
             🛒 小商城
+
         </button>
 
         <button id="clothesButton">
+
             👕 换装
+
         </button>
 
         <button id="profileButton">
+
             📖 个人档案
+
         </button>
 
         <button id="homeButton">
+
             🏠 回家
+
         </button>
 
     </div>
 
 </div>
 
-
 <!-- 墨迹 -->
 
 <div id="currencyDisplay">
+
     💰 墨迹：
+
     <span id="ink-text">100</span>
+
 </div>
 
-
-
-
 <!-- =========================
+
      小游戏入口
+
 ========================= -->
 
 <button id="miniGameButton" aria-label="小游戏">
+
     <span class="game-icon">🎮</span>
+
 </button>
 
 <!-- 小游戏选择 -->
+
 <div id="miniGameOverlay">
+
     <div id="miniGameBox">
+
         <div id="miniGameLimit">今日剩余：10 / 10 次</div>
 
         <div class="mini-game-list">
 
             <div class="mini-game-card" id="memoryGameCard">
+
                 <div class="mini-game-art memory-art">
+
                     <div class="tile active"><img src="character.png" draggable="false"></div>
+
                     <div class="tile">✦</div>
+
                     <div class="tile active">◆</div>
+
                     <div class="tile">○</div>
+
                     <div class="tile">✦</div>
+
                     <div class="tile">□</div>
+
                     <div class="tile">◆</div>
+
                     <div class="tile active">○</div>
+
                     <div class="tile">✦</div>
+
                 </div>
+
                 <div class="mini-game-name">记忆挑战</div>
+
                 <div class="mini-game-desc">6×6 配对，完成6组 +20墨迹</div>
+
             </div>
 
             <div class="mini-game-card" id="catchGameCard">
+
                 <div class="mini-game-art catch-art">
+
                     <span class="falling-item falling-one">🍎</span>
+
                     <span class="falling-item falling-two">⭐</span>
+
                     <span class="falling-item falling-three">🍬</span>
+
                     <img src="character.png" draggable="false">
+
                     <div style="position:absolute;left:50%;bottom:7px;transform:translateX(-50%);font-size:25px">🧺</div>
+
                 </div>
+
                 <div class="mini-game-name">接东西</div>
+
                 <div class="mini-game-desc">良子拿篮子接住掉下来的东西</div>
+
             </div>
 
         </div>
 
         <button id="miniGameCloseButton">关闭</button>
+
     </div>
+
 </div>
 
 <!-- 记忆挑战 -->
-<div id="memoryOverlay">
-    <div id="memoryBox">
-        <div id="memoryTitle">🧠 记忆挑战</div>
-        <div id="memoryStatus">准备开始</div>
-        <div id="memoryBoard"></div>
-        <div id="memoryActions">
-            <button id="memoryStartButton">开始游戏</button>
-            <button id="memoryBackButton">返回</button>
-        </div>
-    </div>
-</div>
 
+<div id="memoryOverlay">
+
+    <div id="memoryBox">
+
+        <div id="memoryTitle">🧠 记忆挑战</div>
+
+        <div id="memoryStatus">准备开始</div>
+
+        <div id="memoryBoard"></div>
+
+        <div id="memoryActions">
+
+            <button id="memoryStartButton">开始游戏</button>
+
+            <button id="memoryBackButton">返回</button>
+
+        </div>
+
+    </div>
+
+</div>
 
 <!-- 指南 -->
 
 <button id="guideButton">
+
     📖 指南
+
 </button>
 
-
 <!-- =========================
+
      指南弹窗
+
 ========================= -->
 
 <div id="guideOverlay">
@@ -1708,172 +2803,227 @@ button:active{
     <div id="guideBox">
 
         <div id="guideTitle">
+
             📖 怎么养良子？
-        </div>
 
+        </div>
 
         <div class="guide-section">
 
             <div class="guide-section-title">
+
                 🍚 怎么增加饱腹度？
+
             </div>
 
             <div class="guide-line">
+
                 🍬 糖果罐：10 墨迹｜饱腹 +10，心情 +5
+
             </div>
 
             <div class="guide-line">
+
                 🧪 瓶装幽火：15 墨迹｜饱腹 +10，心情 -5
+
             </div>
 
             <div class="guide-line">
+
                 🕯️ 银质的夜莺烛台：20 墨迹｜饱腹 +5
+
             </div>
 
             <div class="guide-line">
+
                 🏆 不知道装着什么的金杯：25 墨迹｜饱腹 +10，心情随机变化
+
             </div>
 
             <div class="guide-line">
+
                 🍵 茶：10 墨迹｜饱腹 +10，心情 +3
+
             </div>
 
         </div>
 
-
         <div class="guide-section">
 
             <div class="guide-section-title">
+
                 🛁 怎么增加清洁度？
+
             </div>
 
             <div class="guide-line">
+
                 📜 黄金残页：15 墨迹｜清洁 +10，心情 +5
+
             </div>
 
             <div class="guide-line">
+
                 🫖 水壶：10 墨迹｜清洁 +10，心情 +1
+
             </div>
 
         </div>
 
-
         <div class="guide-section">
 
             <div class="guide-section-title">
+
                 ❤️ 怎么增加心情？
+
             </div>
 
             <div class="guide-line">
+
                 👋 按住良子约 1 秒：心情 +2
+
             </div>
 
             <div class="guide-line">
+
                 🍬 糖果罐：心情 +5
+
             </div>
 
             <div class="guide-line">
+
                 📜 黄金残页：心情 +5
+
             </div>
 
             <div class="guide-line">
+
                 🍵 茶：心情 +3
+
             </div>
 
             <div class="guide-line">
+
                 🫖 水壶：心情 +1
+
             </div>
 
             <div class="guide-line">
+
                 🏆 金杯：心情会随机变化
+
             </div>
 
         </div>
 
-
         <div class="guide-section">
 
             <div class="guide-section-title">
+
                 👋 怎么摸良子？
+
             </div>
 
             <div class="guide-line">
+
                 按住良子约 1 秒，就可以摸摸良子 ❤️
+
             </div>
 
             <div class="guide-line">
+
                 每次成功摸良子，心情 +2。
+
             </div>
 
             <div class="guide-line">
+
                 摸完后需要等待一段时间才能再次摸。
+
             </div>
 
         </div>
 
-
         <div class="guide-section">
 
             <div class="guide-section-title">
+
                 👆 怎么打良子？
+
             </div>
 
             <div class="guide-line">
+
                 快速连续点击良子两次，就会打良子。
+
             </div>
 
             <div class="guide-line">
+
                 打良子会让心情 -5。
+
             </div>
 
         </div>
 
-
         <div class="guide-section">
 
             <div class="guide-section-title">
+
                 💰 墨迹
+
             </div>
 
             <div class="guide-line">
+
                 墨迹可以在小商城购买食物和洗澡用品。
+
             </div>
 
             <div class="guide-line">
+
                 买来的东西会保存在你的物品栏里。
+
             </div>
 
         </div>
-
 
         <div class="guide-section">
 
             <div class="guide-section-title">
+
                 ⏰ 其他注意事项
+
             </div>
 
             <div class="guide-line">
+
                 良子的饱腹度和清洁度每 5 分钟下降 3。
+
             </div>
 
             <div class="guide-line">
+
                 要记得及时吃饭和洗澡，好好照顾良子！
+
             </div>
 
         </div>
-
 
         <button id="closeGuideButton">
+
             ✖️ 关闭指南
+
         </button>
 
     </div>
 
 </div>
 
-
 <!-- =========================
+
      小商城
+
 ========================= -->
 
 <div id="shopOverlay">
@@ -1881,58 +3031,73 @@ button:active{
     <div id="shopBox">
 
         <div id="shopTitle">
+
             🛒 小商城
+
         </div>
 
         <div id="shopMoney">
-            💰 墨迹：
-            <span id="shop-ink">100</span>
-        </div>
 
+            💰 墨迹：
+
+            <span id="shop-ink">100</span>
+
+        </div>
 
         <!-- 食物 -->
 
         <div class="shop-section">
 
             <div class="shop-section-title">
+
                 🍽️ 食物
+
             </div>
 
             <div
+
                 id="foodShopGrid"
+
                 class="shop-grid"
+
             ></div>
 
         </div>
-
 
         <!-- 洗澡 -->
 
         <div class="shop-section">
 
             <div class="shop-section-title">
+
                 🛁 洗澡用品
+
             </div>
 
             <div
+
                 id="bathShopGrid"
+
                 class="shop-grid"
+
             ></div>
 
         </div>
 
-
         <button id="closeShopButton">
+
             ✖️ 关闭商城
+
         </button>
 
     </div>
 
 </div>
 
-
 <!-- =========================
+
      衣柜
+
 ========================= -->
 
 <div id="wardrobe">
@@ -1940,165 +3105,243 @@ button:active{
     <div id="wardrobe-content">
 
         <div id="wardrobe-title">
+
             👕 良子的衣柜
+
         </div>
 
         <div id="wardrobe-hint">
-            可以保存你画过的衣服，以后随时换回来！
-        </div>
 
+            可以保存你画过的衣服，以后随时换回来！
+
+        </div>
 
         <div id="saved-wardrobe">
 
             <div id="saved-wardrobe-title">
+
                 🧥 我的衣服
+
             </div>
 
             <div id="saved-clothes-list"></div>
 
         </div>
 
-
         <div id="drawing-area">
 
             <img
+
                 id="drawing-character"
+
                 src="character.png"
+
             >
 
             <canvas
+
                 id="drawing-canvas"
+
             ></canvas>
 
             <div id="clothing-guide">
+
                 <span>
+
                     在这里画衣服
+
                 </span>
+
             </div>
 
         </div>
-
 
         <div id="drawing-tools">
 
             <div class="drawing-tool-row">
 
                 <button
+
                     class="color-btn"
+
                     data-color="#ff4d4d"
+
                     style="background:#ff4d4d"
+
                 ></button>
 
                 <button
+
                     class="color-btn"
+
                     data-color="#ff9f43"
+
                     style="background:#ff9f43"
+
                 ></button>
 
                 <button
+
                     class="color-btn"
+
                     data-color="#ffd32a"
+
                     style="background:#ffd32a"
+
                 ></button>
 
                 <button
+
                     class="color-btn"
+
                     data-color="#2ed573"
+
                     style="background:#2ed573"
+
                 ></button>
 
                 <button
+
                     class="color-btn"
+
                     data-color="#1e90ff"
+
                     style="background:#1e90ff"
+
                 ></button>
 
                 <button
+
                     class="color-btn"
+
                     data-color="#5352ed"
+
                     style="background:#5352ed"
+
                 ></button>
 
                 <button
+
                     class="color-btn"
+
                     data-color="#a55eea"
+
                     style="background:#a55eea"
+
                 ></button>
 
                 <button
+
                     class="color-btn"
+
                     data-color="#ff6bcb"
+
                     style="background:#ff6bcb"
+
                 ></button>
 
                 <button
+
                     class="color-btn"
+
                     data-color="#333333"
+
                     style="background:#333"
+
                 ></button>
 
                 <input
+
                     id="custom-color"
+
                     type="color"
+
                     value="#ff4d4d"
+
                 >
 
             </div>
 
-
             <div class="drawing-tool-row">
 
                 <button
+
                     id="brush-button"
+
                     class="drawing-tool-button active"
+
                 >
+
                     🖌️ 画笔
+
                 </button>
 
                 <button
+
                     id="eraser-button"
+
                     class="drawing-tool-button"
+
                 >
+
                     🧽 橡皮擦
+
                 </button>
 
                 <span>
+
                     粗细
+
                 </span>
 
                 <input
+
                     id="brush-size"
+
                     type="range"
+
                     min="2"
+
                     max="35"
+
                     value="10"
+
                 >
 
                 <span id="brush-size-text">
+
                     10
+
                 </span>
 
                 <button id="undo-button">
+
                     ↩️ 撤销
+
                 </button>
 
                 <button id="clear-drawing-button">
+
                     🗑️ 清空
+
                 </button>
 
             </div>
 
         </div>
 
-
         <div id="wardrobe-actions">
 
             <button id="save-clothes-button">
+
                 💾 保存到衣柜
+
             </button>
 
             <button id="close-wardrobe-button">
+
                 ✖️ 关闭
+
             </button>
 
         </div>
@@ -2107,9 +3350,10 @@ button:active{
 
 </div>
 
-
 <!-- =========================
+
      个人档案
+
 ========================= -->
 
 <div id="profileOverlay">
@@ -2117,146 +3361,217 @@ button:active{
     <div id="profileBox">
 
         <div id="profileTitle">
+
             📖 良子个人档案
+
         </div>
 
-
         <div class="profile-row">
+
             <span class="profile-label">
+
                 名字
+
             </span>
 
             <span
+
                 id="profileName"
+
                 class="profile-value"
+
             >
+
                 -
+
             </span>
+
         </div>
 
-
         <div class="profile-row">
+
             <span class="profile-label">
+
                 🎂 生日
+
             </span>
 
             <span
+
                 id="profileBirthday"
+
                 class="profile-value"
+
             >
+
                 -
+
             </span>
+
         </div>
 
-
         <div class="profile-row">
+
             <span class="profile-label">
+
                 🌱 开始养育
+
             </span>
 
             <span
+
                 id="profileStartDate"
+
                 class="profile-value"
+
             >
+
                 -
+
             </span>
+
         </div>
 
-
         <div class="profile-row">
+
             <span class="profile-label">
+
                 📅 已养育
+
             </span>
 
             <span
+
                 id="profileDays"
+
                 class="profile-value"
+
             >
+
                 -
+
             </span>
+
         </div>
 
-
         <div class="profile-row">
+
             <span class="profile-label">
+
                 🍚 饱腹度
+
             </span>
 
             <span
+
                 id="profileHunger"
+
                 class="profile-value"
+
             >
+
                 -
+
             </span>
+
         </div>
 
-
         <div class="profile-row">
+
             <span class="profile-label">
+
                 🛁 清洁度
+
             </span>
 
             <span
+
                 id="profileClean"
+
                 class="profile-value"
+
             >
+
                 -
+
             </span>
+
         </div>
 
-
         <div class="profile-row">
+
             <span class="profile-label">
+
                 ❤️ 心情
+
             </span>
 
             <span
-                id="profileMood"
-                class="profile-value"
-            >
-                -
-            </span>
-        </div>
 
+                id="profileMood"
+
+                class="profile-value"
+
+            >
+
+                -
+
+            </span>
+
+        </div>
 
         <div class="profile-row">
+
             <span class="profile-label">
+
                 💰 墨迹
+
             </span>
 
             <span
-                id="profileInk"
-                class="profile-value"
-            >
-                -
-            </span>
-        </div>
 
+                id="profileInk"
+
+                class="profile-value"
+
+            >
+
+                -
+
+            </span>
+
+        </div>
 
         <div class="profile-actions">
 
             <button id="renameButton">
+
                 ✏️ 改名字
+
             </button>
 
             <button id="closeProfileButton">
+
                 ✖️ 关闭
+
             </button>
 
         </div>
 
-
         <div id="authorCredit">
+
             作者：Woshi Jy，有问题可联系fb回报
+
         </div>
 
     </div>
 
 </div>
 
-
 <!-- =========================
+
      名字
+
 ========================= -->
 
 <div id="nameOverlay">
@@ -2264,24 +3579,35 @@ button:active{
     <div id="nameBox">
 
         <div id="nameTitle">
+
             🌱 欢迎开始养育良子
+
         </div>
 
         <div id="nameHint">
+
             请先给良子取一个名字吧！
+
         </div>
 
         <input
+
             id="nameInput"
+
             type="text"
+
             maxlength="20"
+
             placeholder="输入良子的名字"
+
         >
 
         <div class="profile-actions">
 
             <button id="startButton">
+
                 ❤️ 开始养育
+
             </button>
 
         </div>
@@ -2290,68 +3616,124 @@ button:active{
 
 </div>
 
-
 <script>
 
-
 /* =========================
+
    DOM
+
 ========================= */
 
 const character=
+
     document.getElementById("character");
 
 const choiceArea=
+
     document.getElementById("choiceArea");
 
 const message=
+
     document.getElementById("message");
 
 const dialogue=
+
     document.getElementById("dialogue");
 
 const questionMark=
+
     document.getElementById("questionMark");
 
 const homeButton=
+
     document.getElementById("homeButton");
 
 const foodButton=
+
     document.getElementById("foodButton");
 
 const bathButton=
+
     document.getElementById("bathButton");
 
 const shopButton=
+
     document.getElementById("shopButton");
 
 const clothesButton=
+
     document.getElementById("clothesButton");
 
 const profileButton=
+
     document.getElementById("profileButton");
 
 const wardrobe=
+
     document.getElementById("wardrobe");
 
 const drawingCanvas=
+
     document.getElementById("drawing-canvas");
 
 const drawingCtx=
+
     drawingCanvas.getContext("2d");
 
 const drawingArea=
+
     document.getElementById("drawing-area");
 
 const mainClothesCanvas=
+
     document.getElementById("mainClothesCanvas");
 
 const mainClothesCtx=
+
     mainClothesCanvas.getContext("2d");
 
+/* =========================
+
+   指南
+
+========================= */
+
+const guideButton=document.getElementById("guideButton");
+
+const guideOverlay=document.getElementById("guideOverlay");
+
+const closeGuideButton=document.getElementById("closeGuideButton");
+
+function openGuide(){
+
+    guideOverlay.style.display="flex";
+
+}
+
+function closeGuide(){
+
+    guideOverlay.style.display="none";
+
+}
+
+guideButton.addEventListener("click",openGuide);
+
+closeGuideButton.addEventListener("click",closeGuide);
+
+guideOverlay.addEventListener("click",e=>{
+
+    if(e.target===guideOverlay){
+
+        closeGuide();
+
+    }
+
+});
 
 /* =========================
+
    游戏数据
+
 ========================= */
 
 let hunger=50;
@@ -2365,10 +3747,11 @@ let ink=100;
 let currentScene="room";
 
 let nextDecayTime=
+
     Date.now()+300000;
 
-
 const DECAY_INTERVAL=
+
     5*60*1000;
 
 const DECAY_AMOUNT=3;
@@ -2376,14 +3759,16 @@ const DECAY_AMOUNT=3;
 const MOOD_DECAY_AMOUNT=2;
 
 const GAME_KEY=
+
     "liangziGameSave";
 
 const CLOTHES_KEY=
+
     "liangziCustomClothes";
 
 const PROFILE_KEY=
-    "liangziProfile";
 
+    "liangziProfile";
 
 let liangziProfile=null;
 
@@ -2404,12 +3789,15 @@ let selectedClothesId=null;
 let currentClothesData=null;
 
 const MINI_GAME_DAILY_LIMIT=10;
+
 let miniGamePlayDate="";
+
 let miniGamePlays=0;
 
-
 /* =========================
+
    良子声音
+
 ========================= */
 
 const liangziHappyVoice=new Audio("happy.mp3");
@@ -2436,7 +3824,6 @@ function playHappyVoice(){
 
 }
 
-
 function playAngryVoice(){
 
     const now=Date.now();
@@ -2455,19 +3842,24 @@ function playAngryVoice(){
 
 }
 
-
 function checkMoodVoice(){
 
     if(!moodVoiceInitialized){
 
         moodVoiceLastValue=mood;
+
         moodVoiceNextThreshold=
+
             mood>=50
+
                 ?40
+
                 :Math.floor(mood/10)*10;
 
         if(moodVoiceNextThreshold>=mood){
+
             moodVoiceNextThreshold-=10
+
         }
 
         moodVoiceInitialized=true;
@@ -2485,8 +3877,11 @@ function checkMoodVoice(){
     if(mood<moodVoiceLastValue){
 
         while(
+
             mood<=moodVoiceNextThreshold &&
+
             moodVoiceNextThreshold>=0
+
         ){
 
             playAngryVoice();
@@ -2501,101 +3896,157 @@ function checkMoodVoice(){
 
 }
 
-
 /* =========================
+
    物品
+
 ========================= */
 
 const foodItems=[
 
     {
+
         img:"candy.png",
+
         name:"糖果罐",
+
         hunger:10,
+
         mood:5,
+
         price:10,
+
         quantity:3
+
     },
 
     {
+
         img:"poison.png",
+
         name:"瓶装幽火",
+
         hunger:10,
+
         mood:-5,
+
         price:15,
+
         dialogue:"我这是要吃自己吗",
+
         question:true,
+
         quantity:3
+
     },
 
     {
+
         img:"candlestick.png",
+
         name:"银质的夜莺烛台",
+
         hunger:5,
+
         mood:0,
+
         price:20,
+
         dialogue:"这真的能吃吗",
+
         question:true,
+
         quantity:3
+
     },
 
     {
+
         img:"goldcup.png",
+
         name:"不知道装着什么的金杯",
+
         hunger:10,
+
         randomMood:true,
+
         question:false,
+
         price:25,
+
         quantity:3
+
     },
 
     {
+
         img:"tea.png",
+
         name:"茶",
+
         hunger:10,
+
         mood:3,
+
         price:10,
+
         quantity:3
+
     }
 
 ];
-
 
 const bathItems=[
 
     {
+
         img:"golden.png",
+
         name:"黄金残页",
+
         clean:10,
+
         mood:5,
+
         price:15,
+
         quantity:3
+
     },
 
     {
+
         img:"water.png",
+
         name:"水壶",
+
         clean:10,
+
         mood:1,
+
         price:10,
+
         quantity:3
+
     }
 
 ];
 
-
 /* =========================
+
    初始化库存
+
 ========================= */
 
 const allItems=[
+
     ...foodItems,
+
     ...bathItems
+
 ];
 
-
 let inventory={};
-
 
 function initializeInventory(){
 
@@ -2604,10 +4055,15 @@ function initializeInventory(){
     try{
 
         saved=
+
             JSON.parse(
+
                 localStorage.getItem(
+
                     "liangziInventory"
+
                 )||"null"
+
             );
 
     }catch(e){
@@ -2616,20 +4072,28 @@ function initializeInventory(){
 
     }
 
-
     allItems.forEach(item=>{
 
         if(
+
             saved &&
+
             typeof saved[item.name]==="number"
+
         ){
 
             inventory[item.name]=
+
                 Math.max(
+
                     0,
+
                     Math.floor(
+
                         saved[item.name]
+
                     )
+
                 );
 
         }else{
@@ -2642,33 +4106,40 @@ function initializeInventory(){
 
 }
 
-
 function saveInventory(){
 
     localStorage.setItem(
+
         "liangziInventory",
+
         JSON.stringify(inventory)
+
     );
 
 }
 
-
 /* =========================
+
    数值限制
+
 ========================= */
 
 function clamp(v){
 
     return Math.max(
+
         0,
+
         Math.min(100,v)
+
     )
 
 }
 
-
 /* =========================
+
    更新状态
+
 ========================= */
 
 function updateStats(){
@@ -2681,53 +4152,68 @@ function updateStats(){
 
     checkMoodVoice();
 
-
     document.getElementById(
+
         "hunger-text"
+
     ).textContent=hunger;
 
     document.getElementById(
+
         "clean-text"
+
     ).textContent=cleanliness;
 
     document.getElementById(
+
         "mood-text"
+
     ).textContent=mood;
 
-
     document.getElementById(
+
         "hunger-fill"
+
     ).style.width=
+
         hunger+"%";
 
     document.getElementById(
+
         "clean-fill"
+
     ).style.width=
+
         cleanliness+"%";
 
     document.getElementById(
+
         "mood-fill"
+
     ).style.width=
+
         mood+"%";
 
-
     document.getElementById(
+
         "ink-text"
-    ).textContent=ink;
 
+    ).textContent=ink;
 
     document.getElementById(
-        "shop-ink"
-    ).textContent=ink;
 
+        "shop-ink"
+
+    ).textContent=ink;
 
     updateProfileDisplay()
 
 }
 
-
 /* =========================
+
    消息
+
 ========================= */
 
 function showMessage(text){
@@ -2736,145 +4222,170 @@ function showMessage(text){
 
     message.style.display="block";
 
-
     clearTimeout(
+
         showMessage.timer
+
     );
 
-
     showMessage.timer=
+
         setTimeout(
+
             ()=>{
+
                 message.style.display="none"
+
             },
+
             1500
+
         )
 
 }
 
-
 /* =========================
+
    食物对白
+
 ========================= */
 
 function showFoodDialogue(
+
     text,
+
     showQuestion=true
+
 ){
 
     dialogue.textContent=text;
 
     dialogue.style.display="block";
 
-
     if(showQuestion){
 
         questionMark.style.display=
+
             "block"
 
     }else{
 
         questionMark.style.display=
+
             "none"
 
     }
 
-
     clearTimeout(
+
         showFoodDialogue.timer
+
     );
 
-
     showFoodDialogue.timer=
+
         setTimeout(
+
             ()=>{
 
                 dialogue.style.display=
+
                     "none";
 
                 questionMark.style.display=
+
                     "none"
 
             },
+
             1800
+
         )
 
 }
 
-
 /* =========================
+
    场景
+
 ========================= */
 
 function setScene(scene){
 
     currentScene=scene;
 
-
     if(scene==="room"){
 
         document.body.style.backgroundImage=
+
             'url("room.png")';
 
         choiceArea.style.display=
+
             "none";
 
         homeButton.style.display=
+
             "none";
 
     }
 
-
     else if(scene==="food"){
 
         document.body.style.backgroundImage=
+
             'url("dining.png")';
 
         showChoices(foodItems);
 
         homeButton.style.display=
+
             "block";
 
     }
 
-
     else if(scene==="bath"){
 
         document.body.style.backgroundImage=
+
             'url("bath.png")';
 
         showChoices(bathItems);
 
         homeButton.style.display=
+
             "block";
 
     }
 
 }
 
-
 /* =========================
+
    显示物品
+
 ========================= */
 
 function showChoices(items){
 
     choiceArea.innerHTML="";
 
-
     items.forEach(item=>{
 
         const box=
+
             document.createElement("div");
 
         box.className=
+
             "choice-box";
 
-
         const img=
+
             document.createElement("img");
 
         img.className=
+
             "choice-item";
 
         img.src=item.img;
@@ -2882,59 +4393,65 @@ function showChoices(items){
         img.draggable=false;
 
         img.dataset.item=
-            item.name;
 
+            item.name;
 
         box.appendChild(img);
 
-
         const name=
+
             document.createElement("div");
 
         name.className=
+
             "choice-name";
 
         name.textContent=
-            item.name;
 
+            item.name;
 
         box.appendChild(name);
 
-
         const count=
+
             document.createElement("div");
 
         count.className=
+
             "choice-count";
 
         count.textContent=
-            "拥有："+(
-                inventory[item.name]||0
-            );
 
+            "拥有："+(
+
+                inventory[item.name]||0
+
+            );
 
         box.appendChild(count);
 
-
         choiceArea.appendChild(box);
 
-
         addDragEvents(
+
             img,
+
             item
+
         )
 
     });
 
-
     choiceArea.style.display=
+
         "flex"
 
 }
 
-
 /* =========================
+
    更新物品数量
+
 ========================= */
 
 function refreshCurrentItems(){
@@ -2953,14 +4470,18 @@ function refreshCurrentItems(){
 
 }
 
-
 /* =========================
+
    拖动物品
+
 ========================= */
 
 function addDragEvents(
+
     img,
+
     item
+
 ){
 
     let dragging=false;
@@ -2969,74 +4490,91 @@ function addDragEvents(
 
     let clone=null;
 
-
     function start(e){
 
         if(dragging)return;
 
-
         if(
+
             (inventory[item.name]||0)<=0
+
         ){
 
             showMessage(
+
                 "你没有这个物品了！先去商城购买吧 🛒"
+
             );
 
             return
-        }
 
+        }
 
         dragging=true;
 
         pointerId=e.pointerId;
 
-
         clone=
+
             img.cloneNode(true);
 
         clone.className=
+
             "drag-item";
 
         clone.style.left=
+
             e.clientX+"px";
 
         clone.style.top=
+
             e.clientY+"px";
 
-
         document.body.appendChild(
-            clone
-        );
 
+            clone
+
+        );
 
         try{
 
             img.setPointerCapture(
+
                 e.pointerId
+
             )
 
         }catch(err){}
 
-
         document.addEventListener(
+
             "pointermove",
+
             move,
+
             true
+
         );
 
         document.addEventListener(
+
             "pointerup",
+
             end,
+
             true
+
         );
 
         document.addEventListener(
-            "pointercancel",
-            end,
-            true
-        );
 
+            "pointercancel",
+
+            end,
+
+            true
+
+        );
 
         e.preventDefault();
 
@@ -3044,49 +4582,51 @@ function addDragEvents(
 
     }
 
-
     function move(e){
 
         if(
+
             !dragging ||
+
             e.pointerId!==pointerId
+
         ){
 
             return
 
         }
 
-
         if(clone){
 
             clone.style.left=
+
                 e.clientX+"px";
 
             clone.style.top=
+
                 e.clientY+"px"
 
         }
-
 
         e.preventDefault()
 
     }
 
-
     function end(e){
 
         if(
+
             !dragging ||
+
             e.pointerId!==pointerId
+
         ){
 
             return
 
         }
 
-
         dragging=false;
-
 
         if(clone){
 
@@ -3096,50 +4636,65 @@ function addDragEvents(
 
         }
 
-
         document.removeEventListener(
+
             "pointermove",
+
             move,
+
             true
+
         );
 
         document.removeEventListener(
+
             "pointerup",
+
             end,
+
             true
+
         );
 
         document.removeEventListener(
-            "pointercancel",
-            end,
-            true
-        );
 
+            "pointercancel",
+
+            end,
+
+            true
+
+        );
 
         const rect=
+
             character.getBoundingClientRect();
 
-
         if(
+
             e.clientX>=rect.left &&
+
             e.clientX<=rect.right &&
+
             e.clientY>=rect.top &&
+
             e.clientY<=rect.bottom
+
         ){
 
             useItem(item)
 
         }
 
-
         try{
 
             img.releasePointerCapture(
+
                 pointerId
+
             )
 
         }catch(err){}
-
 
         pointerId=null;
 
@@ -3147,63 +4702,75 @@ function addDragEvents(
 
     }
 
-
     img.addEventListener(
+
         "pointerdown",
+
         start
+
     )
 
 }
 
-
 /* =========================
+
    使用物品
+
 ========================= */
 
 function useItem(item){
 
     const owned=
-        inventory[item.name]||0;
 
+        inventory[item.name]||0;
 
     if(owned<=0){
 
         showMessage(
+
             "这个物品已经没有了！去商城买一些吧 🛒"
+
         );
 
         return
 
     }
 
-
     if(
+
         item.hunger &&
+
         hunger>=100
+
     ){
 
         showMessage(
+
             "良子已经吃饱了！等饱腹度下降后再吃吧 🍚"
+
         );
 
         return
 
     }
-
 
     if(
+
         item.clean &&
+
         cleanliness>=100
+
     ){
 
         showMessage(
+
             "良子已经洗得很干净了！等清洁度下降后再洗吧 🛁"
+
         );
 
         return
 
     }
-
 
     /* 消耗一个物品 */
 
@@ -3211,31 +4778,35 @@ function useItem(item){
 
     saveInventory();
 
-
     /* 洗澡 */
 
     if(item.clean){
 
         cleanliness+=
+
             item.clean;
 
         mood+=
-            item.mood||0;
 
+            item.mood||0;
 
         updateStats();
 
         saveGame();
 
-
         showMessage(
-            item.name+
-            " 使用成功！"+
-            " 剩余 "+
-            inventory[item.name]+
-            " 个 🛁"
-        );
 
+            item.name+
+
+            " 使用成功！"+
+
+            " 剩余 "+
+
+            inventory[item.name]+
+
+            " 个 🛁"
+
+        );
 
         refreshCurrentItems();
 
@@ -3243,29 +4814,32 @@ function useItem(item){
 
     }
 
-
     /* 吃饭 */
 
     hunger+=
-        item.hunger||0;
 
+        item.hunger||0;
 
     if(item.randomMood){
 
         const r=
+
             Math.floor(
+
                 Math.random()*16
+
             )-5;
 
-
         mood+=r;
-
 
         if(r<0){
 
             showFoodDialogue(
+
                 "这个东西不好吃😡",
+
                 false
+
             )
 
         }
@@ -3273,8 +4847,11 @@ function useItem(item){
         else if(r>0){
 
             showFoodDialogue(
+
                 "人间美味～～～",
+
                 false
+
             )
 
         }
@@ -3282,8 +4859,11 @@ function useItem(item){
         else{
 
             showFoodDialogue(
+
                 "食物也就一般般吧",
+
                 false
+
             )
 
         }
@@ -3293,14 +4873,17 @@ function useItem(item){
     else{
 
         mood+=
-            item.mood||0;
 
+            item.mood||0;
 
         if(item.dialogue){
 
             showFoodDialogue(
+
                 item.dialogue,
+
                 item.question===true
+
             )
 
         }
@@ -3308,17 +4891,22 @@ function useItem(item){
         else{
 
             showMessage(
+
                 item.name+
+
                 " 吃掉了！"+
+
                 " 剩余 "+
+
                 inventory[item.name]+
+
                 " 个 🍚"
+
             )
 
         }
 
     }
-
 
     updateStats();
 
@@ -3328,132 +4916,167 @@ function useItem(item){
 
 }
 
-
 /* =========================
+
    按钮
+
 ========================= */
 
 foodButton.addEventListener(
+
     "click",
+
     ()=>{
 
         setScene(
+
             currentScene==="food"
+
                 ?"room"
+
                 :"food"
+
         )
 
     }
-);
 
+);
 
 bathButton.addEventListener(
+
     "click",
+
     ()=>{
 
         setScene(
+
             currentScene==="bath"
+
                 ?"room"
+
                 :"bath"
+
         )
 
     }
-);
 
+);
 
 homeButton.addEventListener(
+
     "click",
+
     ()=>setScene("room")
+
 );
 
-
 /* =========================
+
    商城
+
 ========================= */
 
 const shopOverlay=
-    document.getElementById(
-        "shopOverlay"
-    );
 
+    document.getElementById(
+
+        "shopOverlay"
+
+    );
 
 const foodShopGrid=
-    document.getElementById(
-        "foodShopGrid"
-    );
 
+    document.getElementById(
+
+        "foodShopGrid"
+
+    );
 
 const bathShopGrid=
+
     document.getElementById(
+
         "bathShopGrid"
+
     );
 
-
 function createShopCard(
+
     item
+
 ){
 
     const card=
+
         document.createElement("div");
 
     card.className=
+
         "shop-card";
 
-
     const img=
+
         document.createElement("img");
 
     img.src=item.img;
 
-
     const name=
+
         document.createElement("div");
 
     name.className=
+
         "shop-card-name";
 
     name.textContent=
+
         item.name;
 
-
     const price=
+
         document.createElement("div");
 
     price.className=
+
         "shop-card-price";
 
     price.textContent=
+
         "💰 "+item.price+" 墨迹";
 
-
     const owned=
+
         document.createElement("div");
 
     owned.className=
+
         "shop-card-owned";
 
     owned.textContent=
+
         "拥有："+(
+
             inventory[item.name]||0
+
         );
 
-
     const buy=
+
         document.createElement("button");
 
     buy.className=
+
         "shop-buy";
 
     buy.textContent=
-        "购买";
 
+        "购买";
 
     buy.onclick=()=>{
 
         buyItem(item)
 
     };
-
 
     card.appendChild(img);
 
@@ -3465,11 +5088,9 @@ function createShopCard(
 
     card.appendChild(buy);
 
-
     return card
 
 }
-
 
 function renderShop(){
 
@@ -3477,53 +5098,65 @@ function renderShop(){
 
     bathShopGrid.innerHTML="";
 
-
     foodItems.forEach(
-        item=>{
-            foodShopGrid.appendChild(
-                createShopCard(item)
-            )
-        }
-    );
 
+        item=>{
+
+            foodShopGrid.appendChild(
+
+                createShopCard(item)
+
+            )
+
+        }
+
+    );
 
     bathItems.forEach(
+
         item=>{
+
             bathShopGrid.appendChild(
+
                 createShopCard(item)
+
             )
+
         }
+
     );
 
-
     document.getElementById(
+
         "shop-ink"
+
     ).textContent=ink
 
 }
-
 
 function buyItem(item){
 
     if(ink<item.price){
 
         showMessage(
+
             "墨迹不够！需要 "+
+
             item.price+
+
             " 墨迹 💰"
+
         );
 
         return
 
     }
 
-
     ink-=item.price;
 
-
     inventory[item.name]=
-        (inventory[item.name]||0)+1;
 
+        (inventory[item.name]||0)+1;
 
     saveInventory();
 
@@ -3533,51 +5166,62 @@ function buyItem(item){
 
     renderShop();
 
-
     showMessage(
+
         "购买成功！"+
+
         " 获得 1 个 "+
+
         item.name+
+
         " 🛒"
+
     )
 
 }
-
 
 function openShop(){
 
     renderShop();
 
     shopOverlay.style.display=
+
         "flex"
 
 }
 
-
 function closeShop(){
 
     shopOverlay.style.display=
+
         "none"
 
 }
 
-
 shopButton.addEventListener(
-    "click",
-    openShop
-);
 
+    "click",
+
+    openShop
+
+);
 
 document.getElementById(
+
     "closeShopButton"
+
 ).addEventListener(
+
     "click",
+
     closeShop
+
 );
 
-
 shopOverlay.addEventListener(
+
     "click",
+
     e=>{
 
         if(e.target===shopOverlay){
@@ -3587,11 +5231,13 @@ shopOverlay.addEventListener(
         }
 
     }
+
 );
 
-
 /* =========================
+
    摸良子 / 打良子
+
 ========================= */
 
 let petTimer=null;
@@ -3602,22 +5248,25 @@ let longPressTriggered=false;
 
 let lastTap=0;
 
-
 /* 按住约1秒 */
 
 character.addEventListener(
+
     "pointerdown",
+
     e=>{
 
         if(
+
             e.pointerType==="mouse" &&
+
             e.button!==0
+
         ){
 
             return
 
         }
-
 
         if(petCooldown){
 
@@ -3625,112 +5274,129 @@ character.addEventListener(
 
         }
 
-
         longPressTriggered=false;
 
-
         clearTimeout(
+
             petTimer
+
         );
 
-
         petTimer=
+
             setTimeout(
+
                 ()=>{
 
                     longPressTriggered=
+
                         true;
 
-
                     mood=
-                        clamp(
-                            mood+2
-                        );
 
+                        clamp(
+
+                            mood+2
+
+                        );
 
                     updateStats();
 
-
                     showMessage(
+
                         "摸摸良子 ❤️"
+
                     );
 
                     playHappyVoice();
 
-
                     saveGame();
 
-
                     petCooldown=
+
                         true;
 
-
                     setTimeout(
+
                         ()=>petCooldown=false,
+
                         90000
+
                     );
 
                 },
+
                 1000
+
             );
 
     }
-);
 
+);
 
 /* 松开 */
 
 character.addEventListener(
+
     "pointerup",
+
     e=>{
 
         clearTimeout(
-            petTimer
-        );
 
+            petTimer
+
+        );
 
         if(longPressTriggered){
 
             lastTap=0;
 
             longPressTriggered=
+
                 false;
 
             return
 
         }
 
-
         const now=
+
             Date.now();
 
-
         if(
+
             now-lastTap<350 &&
+
             (
+
                 e.pointerType==="touch" ||
+
                 e.pointerType==="mouse"
+
             )
+
         ){
 
             mood=
-                clamp(
-                    mood-5
-                );
 
+                clamp(
+
+                    mood-5
+
+                );
 
             updateStats();
 
-
             showMessage(
+
                 "良子被打了……"
+
             );
 
             playAngryVoice();
 
-
             saveGame();
-
 
             lastTap=0
 
@@ -3741,15 +5407,19 @@ character.addEventListener(
         }
 
     }
+
 );
 
-
 character.addEventListener(
+
     "pointercancel",
+
     ()=>{
 
         clearTimeout(
+
             petTimer
+
         );
 
         longPressTriggered=false;
@@ -3757,27 +5427,35 @@ character.addEventListener(
         lastTap=0
 
     }
-);
 
+);
 
 /* 防止手机长按菜单 */
 
 character.addEventListener(
+
     "contextmenu",
+
     e=>{
+
         e.preventDefault()
+
     }
+
 );
 
-
 /* =========================
+
    保存游戏
+
 ========================= */
 
 function saveGame(){
 
     localStorage.setItem(
+
         GAME_KEY,
+
         JSON.stringify({
 
             hunger,
@@ -3795,74 +5473,94 @@ function saveGame(){
             miniGamePlays
 
         })
+
     )
 
 }
 
-
 /* =========================
+
    读取游戏
+
 ========================= */
 
 function loadGame(){
 
     const s=
-        localStorage.getItem(
-            GAME_KEY
-        );
 
+        localStorage.getItem(
+
+            GAME_KEY
+
+        );
 
     if(s){
 
         try{
 
             const d=
+
                 JSON.parse(s);
 
-
             hunger=
-                typeof d.hunger==="number"
-                    ?d.hunger
-                    :50;
 
+                typeof d.hunger==="number"
+
+                    ?d.hunger
+
+                    :50;
 
             cleanliness=
-                typeof d.cleanliness==="number"
-                    ?d.cleanliness
-                    :50;
 
+                typeof d.cleanliness==="number"
+
+                    ?d.cleanliness
+
+                    :50;
 
             mood=
+
                 typeof d.mood==="number"
+
                     ?d.mood
+
                     :50;
 
-
             ink=
+
                 typeof d.ink==="number"
+
                     ?d.ink
+
                     :100;
 
-
             nextDecayTime=
+
                 typeof d.nextDecayTime==="number"
+
                     ?d.nextDecayTime
+
                     :Date.now()+DECAY_INTERVAL;
 
             miniGamePlayDate=
+
                 typeof d.miniGamePlayDate==="string"
+
                     ?d.miniGamePlayDate
+
                     :"";
 
             miniGamePlays=
+
                 typeof d.miniGamePlays==="number"
+
                     ?Math.max(0,Math.floor(d.miniGamePlays))
+
                     :0;
 
         }catch(e){}
 
     }
-
 
     checkDecay();
 
@@ -3870,47 +5568,57 @@ function loadGame(){
 
 }
 
-
 /* =========================
+
    状态下降
+
 ========================= */
 
 function checkDecay(){
 
     const now=
-        Date.now();
 
+        Date.now();
 
     if(now>=nextDecayTime){
 
         const missed=
+
             Math.floor(
+
                 (
+
                     now-nextDecayTime
+
                 )/
+
                 DECAY_INTERVAL
+
             )+1;
 
-
         hunger-=
-            DECAY_AMOUNT*
-            missed;
 
+            DECAY_AMOUNT*
+
+            missed;
 
         cleanliness-=
-            DECAY_AMOUNT*
-            missed;
 
+            DECAY_AMOUNT*
+
+            missed;
 
         mood-=
-            MOOD_DECAY_AMOUNT*
-            missed;
 
+            MOOD_DECAY_AMOUNT*
+
+            missed;
 
         nextDecayTime+=
-            DECAY_INTERVAL*
-            missed;
 
+            DECAY_INTERVAL*
+
+            missed;
 
         updateStats();
 
@@ -3920,65 +5628,92 @@ function checkDecay(){
 
 }
 
-
 /* =========================
+
    倒计时
+
 ========================= */
 
 function updateTimerDisplay(){
 
     const remain=
-        Math.max(
-            0,
-            nextDecayTime-Date.now()
-        );
 
+        Math.max(
+
+            0,
+
+            nextDecayTime-Date.now()
+
+        );
 
     const total=
-        Math.ceil(
-            remain/1000
-        );
 
+        Math.ceil(
+
+            remain/1000
+
+        );
 
     const m=
-        String(
-            Math.floor(
-                total/60
-            )
-        ).padStart(
-            2,
-            "0"
-        );
 
+        String(
+
+            Math.floor(
+
+                total/60
+
+            )
+
+        ).padStart(
+
+            2,
+
+            "0"
+
+        );
 
     const s=
+
         String(
+
             total%60
+
         ).padStart(
+
             2,
+
             "0"
+
         );
 
-
     document.getElementById(
+
         "timer-text"
+
     ).textContent=
+
         m+":"+s
 
 }
 
-
 setInterval(
+
     ()=>{
+
         checkDecay();
+
         updateTimerDisplay()
+
     },
+
     1000
+
 );
 
-
 /* =========================
+
    衣柜
+
 ========================= */
 
 function getSavedClothes(){
@@ -3986,12 +5721,16 @@ function getSavedClothes(){
     try{
 
         const data=
-            JSON.parse(
-                localStorage.getItem(
-                    CLOTHES_KEY
-                )||"[]"
-            );
 
+            JSON.parse(
+
+                localStorage.getItem(
+
+                    CLOTHES_KEY
+
+                )||"[]"
+
+            );
 
         if(!Array.isArray(data)){
 
@@ -3999,13 +5738,18 @@ function getSavedClothes(){
 
         }
 
-
         return data.filter(
+
             item=>
+
                 item &&
+
                 item.id &&
+
                 item.name &&
+
                 item.data
+
         );
 
     }catch(e){
@@ -4016,16 +5760,17 @@ function getSavedClothes(){
 
 }
 
-
 function saveSavedClothes(arr){
 
     localStorage.setItem(
+
         CLOTHES_KEY,
+
         JSON.stringify(arr)
+
     )
 
 }
-
 
 /* 当前穿着 */
 
@@ -4034,302 +5779,370 @@ function drawCurrentClothes(){
     if(!currentClothesData){
 
         mainClothesCtx.clearRect(
+
             0,
+
             0,
+
             mainClothesCanvas.width,
+
             mainClothesCanvas.height
+
         );
 
         return
 
     }
 
-
     const img=
-        new Image();
 
+        new Image();
 
     img.onload=()=>{
 
         mainClothesCtx.clearRect(
+
             0,
+
             0,
+
             mainClothesCanvas.width,
+
             mainClothesCanvas.height
+
         );
 
-
         mainClothesCtx.drawImage(
+
             img,
+
             0,
+
             0,
+
             mainClothesCanvas.width,
+
             mainClothesCanvas.height
+
         )
 
     };
 
-
     img.src=
+
         currentClothesData
 
 }
-
 
 function applyClothesData(data){
 
     if(!data)return;
 
     currentClothesData=
+
         data;
 
     resizeMainClothesCanvas()
 
 }
 
-
 function clearMainClothes(){
 
     currentClothesData=
-        null;
 
+        null;
 
     resizeMainClothesCanvas();
 
-
     mainClothesCtx.clearRect(
+
         0,
+
         0,
+
         mainClothesCanvas.width,
+
         mainClothesCanvas.height
+
     )
 
 }
 
-
 function resizeMainClothesCanvas(){
 
     const r=
+
         character.getBoundingClientRect();
 
-
     const area=
+
         character.parentElement
+
             .getBoundingClientRect();
 
-
     mainClothesCanvas.width=
-        Math.max(
-            1,
-            Math.round(r.width)
-        );
 
+        Math.max(
+
+            1,
+
+            Math.round(r.width)
+
+        );
 
     mainClothesCanvas.height=
+
         Math.max(
+
             1,
+
             Math.round(r.height)
+
         );
 
-
     mainClothesCanvas.style.width=
+
         r.width+"px";
 
-
     mainClothesCanvas.style.height=
+
         r.height+"px";
 
-
     mainClothesCanvas.style.left=
+
         (r.left-area.left)+"px";
 
-
     mainClothesCanvas.style.top=
-        (r.top-area.top)+"px";
 
+        (r.top-area.top)+"px";
 
     drawCurrentClothes()
 
 }
 
-
 /* =========================
+
    显示保存衣服
+
 ========================= */
 
 function renderSavedClothes(){
 
     const list=
-        document.getElementById(
-            "saved-clothes-list"
-        );
 
+        document.getElementById(
+
+            "saved-clothes-list"
+
+        );
 
     list.innerHTML="";
 
-
     const clothes=
-        getSavedClothes();
 
+        getSavedClothes();
 
     if(!clothes.length){
 
         list.innerHTML=
+
             '<div class="saved-empty">还没有保存的衣服，先画一套吧！</div>';
 
         return
 
     }
 
-
     clothes.forEach(item=>{
 
         const card=
+
             document.createElement(
+
                 "div"
+
             );
 
         card.className=
+
             "saved-clothes-card";
 
-
         const img=
+
             document.createElement(
+
                 "img"
+
             );
 
         img.src=item.data;
 
-
         img.onerror=()=>{
+
             img.style.display=
+
                 "none"
+
         };
 
-
         const name=
+
             document.createElement(
+
                 "div"
+
             );
 
         name.className=
+
             "saved-clothes-name";
 
         name.textContent=
+
             item.name;
 
-
         const wear=
+
             document.createElement(
+
                 "button"
+
             );
 
         wear.textContent=
-            "👕 穿上";
 
+            "👕 穿上";
 
         wear.onclick=()=>{
 
             applyClothesData(
-                item.data
-            );
 
+                item.data
+
+            );
 
             loadDrawing(
+
                 item.data
+
             );
 
-
             showMessage(
+
                 "已穿上「"+
+
                 item.name+
+
                 "」✨"
+
             )
 
         };
 
-
         const edit=
+
             document.createElement(
+
                 "button"
+
             );
 
         edit.textContent=
-            "✏️ 修改";
 
+            "✏️ 修改";
 
         edit.onclick=()=>{
 
             selectedClothesId=
+
                 item.id;
 
-
             loadDrawing(
+
                 item.data
+
             );
 
-
             showMessage(
+
                 "可以修改「"+
+
                 item.name+
+
                 "」了"
+
             )
 
         };
 
-
         const del=
+
             document.createElement(
+
                 "button"
+
             );
 
         del.textContent=
-            "🗑️ 删除";
 
+            "🗑️ 删除";
 
         del.onclick=()=>{
 
             if(
+
                 confirm(
+
                     "确定要删除「"+
+
                     item.name+
+
                     "」吗？"
+
                 )
+
             ){
 
                 const arr=
+
                     getSavedClothes()
+
                         .filter(
+
                             x=>
+
                                 x.id!==
+
                                 item.id
+
                         );
 
-
                 saveSavedClothes(
+
                     arr
+
                 );
 
-
                 if(
+
                     selectedClothesId===
+
                     item.id
+
                 ){
 
                     selectedClothesId=
+
                         null;
 
                     clearMainClothes()
 
                 }
 
-
                 renderSavedClothes()
 
             }
 
         };
-
 
         card.appendChild(img);
 
@@ -4341,19 +6154,17 @@ function renderSavedClothes(){
 
         card.appendChild(del);
 
-
         list.appendChild(card)
 
     })
 
 }
 
-
 function openWardrobe(){
 
     wardrobe.style.display=
-        "block";
 
+        "block";
 
     renderSavedClothes();
 
@@ -4363,86 +6174,107 @@ function openWardrobe(){
 
 }
 
-
 function closeWardrobe(){
 
     wardrobe.style.display=
+
         "none"
 
 }
 
-
 clothesButton.addEventListener(
-    "click",
-    openWardrobe
-);
 
+    "click",
+
+    openWardrobe
+
+);
 
 document.getElementById(
+
     "close-wardrobe-button"
+
 ).addEventListener(
+
     "click",
+
     closeWardrobe
+
 );
 
-
 /* =========================
+
    画衣服
+
 ========================= */
 
 function resizeDrawingCanvas(){
 
     const r=
+
         drawingArea.getBoundingClientRect();
 
-
     const old=
+
         drawingCanvas.toDataURL();
 
-
     drawingCanvas.width=
-        Math.max(
-            1,
-            Math.round(r.width)
-        );
 
+        Math.max(
+
+            1,
+
+            Math.round(r.width)
+
+        );
 
     drawingCanvas.height=
+
         Math.max(
+
             1,
+
             Math.round(r.height)
+
         );
 
-
     drawingCanvas.style.width=
+
         r.width+"px";
 
-
     drawingCanvas.style.height=
+
         r.height+"px";
 
-
     if(
+
         old &&
+
         old!=="data:,"
+
     ){
 
         const img=
-            new Image();
 
+            new Image();
 
         img.onload=()=>{
 
             drawingCtx.drawImage(
+
                 img,
+
                 0,
+
                 0,
+
                 drawingCanvas.width,
+
                 drawingCanvas.height
+
             )
 
         };
-
 
         img.src=old
 
@@ -4450,423 +6282,537 @@ function resizeDrawingCanvas(){
 
 }
 
-
 function getDrawPosition(e){
 
     const r=
-        drawingCanvas.getBoundingClientRect();
 
+        drawingCanvas.getBoundingClientRect();
 
     return{
 
         x:
+
             (e.clientX-r.left)*
+
             drawingCanvas.width/
+
             r.width,
 
         y:
+
             (e.clientY-r.top)*
+
             drawingCanvas.height/
+
             r.height
 
     }
 
 }
 
-
 function startDrawing(e){
 
     drawHistory.push(
-        drawingCtx.getImageData(
-            0,
-            0,
-            drawingCanvas.width,
-            drawingCanvas.height
-        )
-    );
 
+        drawingCtx.getImageData(
+
+            0,
+
+            0,
+
+            drawingCanvas.width,
+
+            drawingCanvas.height
+
+        )
+
+    );
 
     isDrawing=true;
 
-
     const p=
-        getDrawPosition(e);
 
+        getDrawPosition(e);
 
     lastDrawX=p.x;
 
     lastDrawY=p.y;
 
-
     drawingCtx.beginPath();
 
-
     drawingCtx.arc(
-        p.x,
-        p.y,
-        Number(
-            document.getElementById(
-                "brush-size"
-            ).value
-        )/2,
-        0,
-        Math.PI*2
-    );
 
+        p.x,
+
+        p.y,
+
+        Number(
+
+            document.getElementById(
+
+                "brush-size"
+
+            ).value
+
+        )/2,
+
+        0,
+
+        Math.PI*2
+
+    );
 
     if(drawTool==="eraser"){
 
         drawingCtx.globalCompositeOperation=
+
             "destination-out";
 
         drawingCtx.fillStyle=
+
             "rgba(0,0,0,1)"
 
     }else{
 
         drawingCtx.globalCompositeOperation=
+
             "source-over";
 
         drawingCtx.fillStyle=
+
             drawColor
 
     }
 
-
     drawingCtx.fill();
 
     drawingCtx.globalCompositeOperation=
-        "source-over";
 
+        "source-over";
 
     e.preventDefault()
 
 }
 
-
 drawingCanvas.addEventListener(
+
     "pointerdown",
+
     startDrawing
+
 );
 
-
 drawingCanvas.addEventListener(
+
     "pointermove",
+
     e=>{
 
         if(!isDrawing)return;
 
-
         const p=
-            getDrawPosition(e);
 
+            getDrawPosition(e);
 
         drawingCtx.beginPath();
 
-
         drawingCtx.moveTo(
-            lastDrawX,
-            lastDrawY
-        );
 
+            lastDrawX,
+
+            lastDrawY
+
+        );
 
         drawingCtx.lineTo(
+
             p.x,
+
             p.y
+
         );
 
-
         drawingCtx.lineWidth=
+
             Number(
+
                 document.getElementById(
+
                     "brush-size"
+
                 ).value
+
             );
 
-
         drawingCtx.lineCap=
+
             "round";
 
         drawingCtx.lineJoin=
-            "round";
 
+            "round";
 
         if(drawTool==="eraser"){
 
             drawingCtx.globalCompositeOperation=
+
                 "destination-out";
 
             drawingCtx.strokeStyle=
+
                 "rgba(0,0,0,1)"
 
         }else{
 
             drawingCtx.globalCompositeOperation=
+
                 "source-over";
 
             drawingCtx.strokeStyle=
+
                 drawColor
 
         }
 
-
         drawingCtx.stroke();
 
         drawingCtx.globalCompositeOperation=
-            "source-over";
 
+            "source-over";
 
         lastDrawX=p.x;
 
         lastDrawY=p.y;
 
-
         e.preventDefault()
 
     }
-);
 
+);
 
 function stopDrawing(){
 
     isDrawing=false;
 
     drawingCtx.globalCompositeOperation=
+
         "source-over"
 
 }
 
-
 drawingCanvas.addEventListener(
+
     "pointerup",
-    stopDrawing
-);
 
+    stopDrawing
+
+);
 
 drawingCanvas.addEventListener(
-    "pointercancel",
-    stopDrawing
-);
 
+    "pointercancel",
+
+    stopDrawing
+
+);
 
 /* =========================
+
    颜色
+
 ========================= */
 
 document.querySelectorAll(
+
     ".color-btn"
+
 ).forEach(
+
     b=>
+
         b.addEventListener(
+
             "click",
+
             ()=>{
 
                 drawColor=
+
                     b.dataset.color;
 
                 drawTool=
+
                     "brush";
 
                 updateDrawingToolButtons()
 
             }
+
         )
+
 );
 
-
 document.getElementById(
+
     "custom-color"
+
 ).addEventListener(
+
     "input",
+
     e=>{
 
         drawColor=
+
             e.target.value;
 
         drawTool=
+
             "brush";
 
         updateDrawingToolButtons()
 
     }
+
 );
 
-
 document.getElementById(
+
     "brush-button"
+
 ).addEventListener(
+
     "click",
+
     ()=>{
 
         drawTool=
+
             "brush";
 
         updateDrawingToolButtons()
 
     }
+
 );
 
-
 document.getElementById(
+
     "eraser-button"
+
 ).addEventListener(
+
     "click",
+
     ()=>{
 
         drawTool=
+
             "eraser";
 
         updateDrawingToolButtons()
 
     }
-);
 
+);
 
 function updateDrawingToolButtons(){
 
     document.getElementById(
+
         "brush-button"
+
     ).classList.toggle(
+
         "active",
+
         drawTool==="brush"
+
     );
 
-
     document.getElementById(
+
         "eraser-button"
+
     ).classList.toggle(
+
         "active",
+
         drawTool==="eraser"
+
     )
 
 }
 
-
 document.getElementById(
+
     "brush-size"
+
 ).addEventListener(
+
     "input",
+
     e=>
+
         document.getElementById(
+
             "brush-size-text"
+
         ).textContent=
+
             e.target.value
+
 );
 
-
 document.getElementById(
+
     "undo-button"
+
 ).addEventListener(
+
     "click",
+
     ()=>{
 
         if(!drawHistory.length)return;
 
-
         drawingCtx.putImageData(
+
             drawHistory.pop(),
+
             0,
+
             0
+
         )
 
     }
+
 );
 
-
 document.getElementById(
+
     "clear-drawing-button"
+
 ).addEventListener(
+
     "click",
+
     ()=>{
 
         drawHistory.push(
+
             drawingCtx.getImageData(
+
                 0,
+
                 0,
+
                 drawingCanvas.width,
+
                 drawingCanvas.height
+
             )
+
         );
 
-
         drawingCtx.clearRect(
+
             0,
+
             0,
+
             drawingCanvas.width,
+
             drawingCanvas.height
+
         )
 
     }
+
 );
 
-
 /* =========================
+
    保存衣服
+
 ========================= */
 
 function saveClothes(){
 
     const data=
-        drawingCanvas.toDataURL(
-            "image/png"
-        );
 
+        drawingCanvas.toDataURL(
+
+            "image/png"
+
+        );
 
     let name=
-        prompt(
-            "给这套衣服取个名字吧：",
-            "我的新衣服"
-        );
 
+        prompt(
+
+            "给这套衣服取个名字吧：",
+
+            "我的新衣服"
+
+        );
 
     if(name===null)return;
 
-
     name=
+
         name.trim()||
+
         "我的新衣服";
 
-
     const clothes=
-        getSavedClothes();
 
+        getSavedClothes();
 
     if(selectedClothesId){
 
         const i=
-            clothes.findIndex(
-                x=>
-                    x.id===
-                    selectedClothesId
-            );
 
+            clothes.findIndex(
+
+                x=>
+
+                    x.id===
+
+                    selectedClothesId
+
+            );
 
         if(i!==-1){
 
             clothes[i].name=
+
                 name;
 
             clothes[i].data=
+
                 data;
 
-
             saveSavedClothes(
-                clothes
-            );
 
+                clothes
+
+            );
 
             applyClothesData(
-                data
-            );
 
+                data
+
+            );
 
             renderSavedClothes();
 
-
             showMessage(
-                "衣服修改成功 👕✨"
-            );
 
+                "衣服修改成功 👕✨"
+
+            );
 
             return
 
@@ -4874,26 +6820,32 @@ function saveClothes(){
 
     }
 
-
     if(clothes.length>=3){
 
         showMessage(
+
             "衣柜最多只能保存 3 套衣服 👕"
+
         );
 
         return
 
     }
 
-
     const item={
 
         id:
+
             "clothes-"+
+
             Date.now()+
+
             "-"+
+
             Math.random()
+
                 .toString(36)
+
                 .slice(2),
 
         name,
@@ -4902,84 +6854,100 @@ function saveClothes(){
 
     };
 
-
     clothes.push(item);
 
-
     saveSavedClothes(
-        clothes
-    );
 
+        clothes
+
+    );
 
     selectedClothesId=null;
 
-
     applyClothesData(
-        data
-    );
 
+        data
+
+    );
 
     renderSavedClothes();
 
-
     showMessage(
+
         "「"+
+
         name+
+
         "」已保存到衣柜 👕✨"
+
     )
 
 }
 
-
 function loadDrawing(data){
 
     const img=
-        new Image();
 
+        new Image();
 
     img.onload=()=>{
 
         drawingCtx.clearRect(
+
             0,
+
             0,
+
             drawingCanvas.width,
+
             drawingCanvas.height
+
         );
 
-
         drawingCtx.drawImage(
+
             img,
+
             0,
+
             0,
+
             drawingCanvas.width,
+
             drawingCanvas.height
+
         )
 
     };
-
 
     img.src=data
 
 }
 
-
 document.getElementById(
+
     "save-clothes-button"
+
 ).addEventListener(
+
     "click",
+
     saveClothes
+
 );
 
-
 window.addEventListener(
+
     "resize",
+
     ()=>{
 
         resizeMainClothesCanvas();
 
-
         if(
+
             wardrobe.style.display==="block"
+
         ){
 
             resizeDrawingCanvas()
@@ -4987,126 +6955,151 @@ window.addEventListener(
         }
 
     }
+
 );
 
-
 /* =========================
+
    日期
+
 ========================= */
 
 function getLocalDateString(){
 
     const d=
+
         new Date();
 
-
     const y=
+
         d.getFullYear();
 
-
     const m=
-        String(
-            d.getMonth()+1
-        ).padStart(
-            2,
-            "0"
-        );
 
+        String(
+
+            d.getMonth()+1
+
+        ).padStart(
+
+            2,
+
+            "0"
+
+        );
 
     const day=
-        String(
-            d.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
 
+        String(
+
+            d.getDate()
+
+        ).padStart(
+
+            2,
+
+            "0"
+
+        );
 
     return y+"-"+m+"-"+day
 
 }
 
-
 function formatDate(s){
 
     if(!s)return"-";
 
-
     const p=
-        s.split("-");
 
+        s.split("-");
 
     return p.length===3
 
         ?p[0]+"年"+
+
          Number(p[1])+"月"+
+
          Number(p[2])+"日"
 
         :s
 
 }
 
-
 function calculateRaisedDays(start){
 
     if(!start)return 1;
 
-
     const a=
-        new Date(
-            start+
-            "T00:00:00"
-        );
 
+        new Date(
+
+            start+
+
+            "T00:00:00"
+
+        );
 
     const b=
+
         new Date(
+
             getLocalDateString()+
+
             "T00:00:00"
+
         );
 
-
     return Math.max(
+
         1,
+
         Math.floor(
+
             (b-a)/86400000
+
         )+1
+
     )
 
 }
 
-
 /* =========================
+
    Profile
+
 ========================= */
 
 function loadProfile(){
 
     const s=
-        localStorage.getItem(
-            PROFILE_KEY
-        );
 
+        localStorage.getItem(
+
+            PROFILE_KEY
+
+        );
 
     if(!s){
 
         liangziProfile=
+
             null;
 
         return
 
     }
 
-
     try{
 
         liangziProfile=
-            JSON.parse(s);
 
+            JSON.parse(s);
 
         if(!liangziProfile.name){
 
             liangziProfile=
+
                 null
 
         }
@@ -5114,55 +7107,62 @@ function loadProfile(){
     }catch(e){
 
         liangziProfile=
+
             null
 
     }
 
 }
 
-
 function saveProfile(){
 
     if(liangziProfile){
 
         localStorage.setItem(
+
             PROFILE_KEY,
+
             JSON.stringify(
+
                 liangziProfile
+
             )
+
         )
 
     }
 
 }
 
-
 function startLiangzi(){
 
     const input=
+
         document.getElementById(
+
             "nameInput"
+
         );
 
-
     const name=
-        input.value.trim();
 
+        input.value.trim();
 
     if(!name){
 
         showNameError(
+
             "请输入良子的名字 ❤️"
+
         );
 
         return
 
     }
 
-
     const today=
-        getLocalDateString();
 
+        getLocalDateString();
 
     liangziProfile={
 
@@ -5174,35 +7174,39 @@ function startLiangzi(){
 
     };
 
-
     saveProfile();
 
-
     document.getElementById(
-        "nameOverlay"
-    ).style.display=
-        "none";
 
+        "nameOverlay"
+
+    ).style.display=
+
+        "none";
 
     updateProfileDisplay();
 
-
     showMessage(
+
         "欢迎你，"+
+
         name+
+
         "！🌱"
+
     )
 
 }
 
-
 function showNameError(t){
 
     const h=
-        document.getElementById(
-            "nameHint"
-        );
 
+        document.getElementById(
+
+            "nameHint"
+
+        );
 
     h.textContent=t;
 
@@ -5210,185 +7214,232 @@ function showNameError(t){
 
 }
 
-
 function openProfile(){
 
     if(!liangziProfile){
 
         document.getElementById(
+
             "nameOverlay"
+
         ).style.display=
+
             "flex";
 
         return
 
     }
 
-
     updateProfileDisplay();
 
-
     document.getElementById(
+
         "profileOverlay"
+
     ).style.display=
+
         "flex"
 
 }
 
-
 function closeProfile(){
 
     document.getElementById(
+
         "profileOverlay"
+
     ).style.display=
+
         "none"
 
 }
-
 
 function updateProfileDisplay(){
 
     if(!liangziProfile)return;
 
-
     document.getElementById(
+
         "profileName"
+
     ).textContent=
+
         liangziProfile.name;
 
-
     document.getElementById(
+
         "profileBirthday"
+
     ).textContent=
+
         formatDate(
+
             liangziProfile.birthday
+
         );
 
-
     document.getElementById(
+
         "profileStartDate"
+
     ).textContent=
+
         formatDate(
+
             liangziProfile.startDate
+
         );
 
-
     document.getElementById(
+
         "profileDays"
+
     ).textContent=
+
         calculateRaisedDays(
+
             liangziProfile.startDate
+
         )+
+
         " 天";
 
-
     document.getElementById(
+
         "profileHunger"
+
     ).textContent=
+
         hunger;
 
-
     document.getElementById(
+
         "profileClean"
+
     ).textContent=
+
         cleanliness;
 
-
     document.getElementById(
+
         "profileMood"
+
     ).textContent=
+
         mood;
 
-
     document.getElementById(
+
         "profileInk"
+
     ).textContent=
+
         ink
 
 }
-
 
 function renameLiangzi(){
 
     if(!liangziProfile)return;
 
-
     const n=
-        prompt(
-            "请输入良子的新名字：",
-            liangziProfile.name
-        );
 
+        prompt(
+
+            "请输入良子的新名字：",
+
+            liangziProfile.name
+
+        );
 
     if(n===null)return;
 
-
     const t=
-        n.trim();
 
+        n.trim();
 
     if(!t){
 
         showMessage(
+
             "名字不能为空 ❤️"
+
         );
 
         return
 
     }
 
-
     liangziProfile.name=t;
-
 
     saveProfile();
 
     updateProfileDisplay();
 
-
     showMessage(
+
         "良子的名字改成「"+
+
         t+
+
         "」了 ✨"
+
     )
 
 }
 
-
 profileButton.addEventListener(
+
     "click",
+
     openProfile
+
 );
 
-
 document.getElementById(
+
     "closeProfileButton"
+
 ).addEventListener(
+
     "click",
+
     closeProfile
+
 );
 
-
 document.getElementById(
+
     "renameButton"
+
 ).addEventListener(
+
     "click",
+
     renameLiangzi
+
 );
 
-
 document.getElementById(
+
     "startButton"
+
 ).addEventListener(
+
     "click",
+
     startLiangzi
+
 );
 
-
 document.getElementById(
+
     "nameInput"
+
 ).addEventListener(
+
     "keydown",
+
     e=>{
 
         if(e.key==="Enter"){
@@ -5398,75 +7449,103 @@ document.getElementById(
         }
 
     }
+
 );
 
-
-
-
 /* =========================
+
    读取已保存的游戏资料
+
 ========================= */
 
 initializeInventory();
+
 loadProfile();
+
 loadGame();
 
-
 /* =========================
+
    小游戏：入口 / 记忆挑战
+
 ========================= */
 
 const miniGameButton=
+
     document.getElementById("miniGameButton");
 
 const miniGameOverlay=
+
     document.getElementById("miniGameOverlay");
 
 const miniGameCloseButton=
+
     document.getElementById("miniGameCloseButton");
 
 const memoryGameCard=
+
     document.getElementById("memoryGameCard");
 
 const catchGameCard=
+
     document.getElementById("catchGameCard");
 
 const memoryOverlay=
+
     document.getElementById("memoryOverlay");
 
 const memoryBoard=
+
     document.getElementById("memoryBoard");
 
 const memoryStatus=
+
     document.getElementById("memoryStatus");
 
 const memoryStartButton=
+
     document.getElementById("memoryStartButton");
 
 const memoryBackButton=
+
     document.getElementById("memoryBackButton");
 
 const MEMORY_PAIRS_TO_WIN=6;
+
 const MEMORY_REWARD=20;
 
 const memoryShapes=[
+
     "◆","●","▲","★","♥","☀","☾","♣","♠","■",
+
     "✿","✦","☁","♫","⚡","❖","◇","○"
+
 ];
 
 let memoryCards=[];
+
 let memorySelected=[];
+
 let memoryMatched=[];
+
 let memoryPlaying=false;
+
 let memoryBusy=false;
+
 let memoryPairsCompleted=0;
+
 let memoryReveal=false;
 
 function getMiniGameToday(){
+
     const d=new Date();
+
     return d.getFullYear()+"-"+
+
         String(d.getMonth()+1).padStart(2,"0")+"-"+
+
         String(d.getDate()).padStart(2,"0");
+
 }
 
 function refreshMiniGameDailyLimit(){
@@ -5474,23 +7553,33 @@ function refreshMiniGameDailyLimit(){
     const today=getMiniGameToday();
 
     if(miniGamePlayDate!==today){
+
         miniGamePlayDate=today;
+
         miniGamePlays=0;
+
         saveGame();
+
     }
 
     const remaining=
+
         Math.max(0,MINI_GAME_DAILY_LIMIT-miniGamePlays);
 
     const limitText=
+
         document.getElementById("miniGameLimit");
 
     if(limitText){
+
         limitText.textContent=
+
             "今日剩余："+remaining+" / "+MINI_GAME_DAILY_LIMIT+" 次";
+
     }
 
     return remaining;
+
 }
 
 function canPlayMiniGame(){
@@ -5498,11 +7587,15 @@ function canPlayMiniGame(){
     const remaining=refreshMiniGameDailyLimit();
 
     if(remaining<=0){
+
         showMessage("今天的小游戏次数已经用完啦～ 明天再来！🎮");
+
         return false;
+
     }
 
     return true;
+
 }
 
 function recordMiniGamePlay(){
@@ -5514,44 +7607,67 @@ function recordMiniGamePlay(){
     saveGame();
 
     refreshMiniGameDailyLimit();
+
 }
 
 function openMiniGames(){
+
     refreshMiniGameDailyLimit();
+
     miniGameOverlay.style.display="flex";
+
 }
 
 function closeMiniGames(){
+
     miniGameOverlay.style.display="none";
+
 }
 
 miniGameButton.addEventListener(
+
     "click",
+
     openMiniGames
+
 );
 
 miniGameCloseButton.addEventListener(
+
     "click",
+
     closeMiniGames
+
 );
 
 miniGameOverlay.addEventListener(
+
     "click",
+
     e=>{
+
         if(e.target===miniGameOverlay){
+
             closeMiniGames()
+
         }
+
     }
+
 );
 
 function shuffleArray(arr){
 
     for(let i=arr.length-1;i>0;i--){
+
         const j=Math.floor(Math.random()*(i+1));
+
         [arr[i],arr[j]]=[arr[j],arr[i]];
+
     }
 
     return arr;
+
 }
 
 function renderMemoryBoard(){
@@ -5561,36 +7677,53 @@ function renderMemoryBoard(){
     memoryCards.forEach((shape,index)=>{
 
         const cell=
+
             document.createElement("div");
 
         cell.className="memory-cell";
+
         cell.dataset.index=index;
 
         const isMatched=memoryMatched.includes(index);
+
         const isSelected=memorySelected.includes(index);
 
         /* 开始时全部显示；预览结束后全部隐藏，只有选中的/配对成功的显示 */
+
         if(memoryReveal || isMatched || isSelected){
+
             cell.textContent=shape;
+
         }else{
+
             cell.textContent="";
+
         }
 
         if(isMatched){
+
             cell.classList.add("correct");
+
         }
 
         if(isSelected){
+
             cell.classList.add("pattern");
+
         }
 
         cell.addEventListener(
+
             "click",
+
             ()=>selectMemoryCell(index,cell)
+
         );
 
         memoryBoard.appendChild(cell)
+
     });
+
 }
 
 function startMemoryGame(){
@@ -5600,39 +7733,53 @@ function startMemoryGame(){
     if(!canPlayMiniGame()) return;
 
     memoryPlaying=true;
+
     memoryBusy=true;
+
     memoryReveal=true;
+
     memorySelected=[];
+
     memoryMatched=[];
+
     memoryPairsCompleted=0;
 
     const deck=[];
 
     memoryShapes.forEach(shape=>{
+
         deck.push(shape,shape);
+
     });
 
     memoryCards=shuffleArray(deck);
 
     memoryStatus.textContent=
+
         "先记住这36个格子的位置！4秒后会全部变空白～";
 
     memoryStartButton.disabled=true;
+
     renderMemoryBoard();
 
     /* 先显示36个形状约4秒，然后全部隐藏 */
+
     setTimeout(()=>{
 
         if(!memoryPlaying) return;
 
         memoryReveal=false;
+
         memoryBusy=false;
+
         renderMemoryBoard();
 
         memoryStatus.textContent=
+
             "开始找吧！选出两个一样的形状，完成 6 组就通关！";
 
     },4000);
+
 }
 
 function selectMemoryCell(index,cell){
@@ -5646,72 +7793,101 @@ function selectMemoryCell(index,cell){
     memorySelected.push(index);
 
     /* 玩家点击后，马上显示这个格子的形状 */
+
     cell.textContent=memoryCards[index];
 
     cell.classList.add("pattern");
 
     if(memorySelected.length<2){
+
         memoryStatus.textContent="再选一个一样的形状！";
+
         return;
+
     }
 
     memoryBusy=true;
 
     const first=memorySelected[0];
+
     const second=memorySelected[1];
 
     if(memoryCards[first]===memoryCards[second]){
 
         memoryMatched.push(first,second);
+
         memoryPairsCompleted++;
 
         document
+
             .querySelectorAll("#memoryBoard .memory-cell")
+
             .forEach((item,i)=>{
+
                 if(i===first || i===second){
+
                     item.classList.remove("pattern");
+
                     item.classList.add("correct");
+
                 }
+
             });
 
         memorySelected=[];
+
         memoryBusy=false;
 
         if(memoryPairsCompleted>=MEMORY_PAIRS_TO_WIN){
 
             memoryPlaying=false;
+
             memoryStartButton.disabled=false;
 
             ink+=MEMORY_REWARD;
+
             recordMiniGamePlay();
+
             updateStats();
+
             saveGame();
 
             memoryStatus.textContent=
+
                 "完成 6 组！获得 "+MEMORY_REWARD+" 墨迹 ✨";
 
             showMessage(
+
                 "记忆挑战通关！+"+MEMORY_REWARD+" 墨迹 🎮"
+
             );
 
             return;
+
         }
 
         memoryStatus.textContent=
+
             "完成 "+memoryPairsCompleted+" / "+MEMORY_PAIRS_TO_WIN+" 组！继续找～";
 
         return;
+
     }
 
     cell.classList.add("wrong");
 
     const firstCell=
+
         document.querySelector(
+
             '#memoryBoard .memory-cell[data-index="'+first+'"]'
+
         );
 
     if(firstCell){
+
         firstCell.classList.add("wrong");
+
     }
 
     memoryStatus.textContent="不是一对，再试试看！";
@@ -5721,70 +7897,117 @@ function selectMemoryCell(index,cell){
         if(!memoryPlaying) return;
 
         memorySelected=[];
+
         memoryBusy=false;
+
         renderMemoryBoard();
+
         memoryStatus.textContent=
+
             "找出两个一样的格子，完成 6 组就算通关！";
 
     },500);
+
 }
 
 memoryStartButton.addEventListener(
+
     "click",
+
     startMemoryGame
+
 );
 
 memoryGameCard.addEventListener(
+
     "click",
+
     ()=>{
+
         if(!canPlayMiniGame()) return;
 
         closeMiniGames();
+
         memoryOverlay.style.display="flex";
+
         memoryPlaying=false;
+
         memoryBusy=false;
+
         memoryReveal=false;
+
         memorySelected=[];
+
         memoryMatched=[];
+
         memoryPairsCompleted=0;
+
         memoryCards=[];
+
         memoryStartButton.disabled=false;
+
         memoryStatus.textContent="6×6 格子，找出相同形状配成一对！";
+
         memoryBoard.innerHTML="";
+
     }
+
 );
 
 catchGameCard.addEventListener(
+
     "click",
+
     ()=>{
+
         showMessage("接东西小游戏还在准备中～ 🎮");
+
     }
+
 );
 
 memoryBackButton.addEventListener(
+
     "click",
+
     ()=>{
+
         memoryPlaying=false;
+
         memoryBusy=false;
+
         memoryOverlay.style.display="none";
+
         miniGameOverlay.style.display="flex";
+
         refreshMiniGameDailyLimit()
+
     }
+
 );
 
 memoryOverlay.addEventListener(
-    "click",
-    e=>{
-        if(e.target===memoryOverlay){
-            memoryPlaying=false;
-            memoryBusy=false;
-            memoryOverlay.style.display="none"
-        }
-    }
-);
 
+    "click",
+
+    e=>{
+
+        if(e.target===memoryOverlay){
+
+            memoryPlaying=false;
+
+            memoryBusy=false;
+
+            memoryOverlay.style.display="none"
+
+        }
+
+    }
+
+);
 
 </script>
 
 </body>
+
 </html>
